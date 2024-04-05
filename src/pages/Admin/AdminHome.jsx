@@ -4,8 +4,9 @@ import AdminTopbar from './components/AdminTopbar';
 import DashboardGrid from './components/Dashboard/DashboardGrid';
 import { Grid, Typography } from '@mui/material';
 import PendingRequestTable from './components/Request/PendingRequest/PendingRequestTable';
-import ApproveRequestTable from './components/Request/ApproveRequest/ApproveRequestTable'; // Import the ApproveRequestTable
-import RejectRequestTable from './components/Request/RejectRequest/RejectRequestTable'; // Import the RejectRequestTable
+import ApproveRequestTable from './components/Request/ApproveRequest/ApproveRequestTable';
+import RejectRequestTable from './components/Request/RejectRequest/RejectRequestTable';
+import CategoryTable from './components/Category/CategoryTable'; 
 
 const AdminHome = () => {
   const [selectedTab, setSelectedTab] = useState('pending');
@@ -28,7 +29,6 @@ const AdminHome = () => {
     },
   ];
 
-  // Sample approved requests data
   const approvedRequests = [
     {
       id: 1,
@@ -43,7 +43,6 @@ const AdminHome = () => {
     },
   ];
 
-  // Sample rejected requests data
   const rejectedRequests = [
     {
       id: 1,
@@ -71,22 +70,24 @@ const AdminHome = () => {
             {selectedTab === 'pending' && (
               <Grid item xs={12}>
                 <Typography variant='h6'>Pending Request Table</Typography>
-                {/* Render the PendingRequestTable */}
                 <PendingRequestTable pendingRequests={pendingRequests} /> 
               </Grid>
             )}
             {selectedTab === 'approve' && (
               <Grid item xs={12}>
                 <Typography variant='h6'>Approved Request Table</Typography>
-                {/* Render the ApproveRequestTable */}
                 <ApproveRequestTable approvedRequests={approvedRequests} />
               </Grid>
             )}
             {selectedTab === 'reject' && (
               <Grid item xs={12}>
                 <Typography variant='h6'>Rejected Request Table</Typography>
-                {/* Render the RejectRequestTable */}
                 <RejectRequestTable rejectedRequests={rejectedRequests} />
+              </Grid>
+            )}
+            {selectedTab === 'categories' && (
+              <Grid item xs={12}>
+                <CategoryTable />
               </Grid>
             )}
           </Grid>

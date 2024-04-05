@@ -3,7 +3,10 @@ import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarFooter, Side
 import 'react-pro-sidebar/dist/css/styles.css';
 import { MdMenu, MdClose } from 'react-icons/md';
 import { Dashboard, Category, Markunread, CheckCircle, Schedule, Cancel } from '@mui/icons-material';
+import { IconButton } from '@mui/material'; // Import IconButton
+import { Logout } from '@mui/icons-material'; // Import Logout icon
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for navigation
 
 const SidebarToggle = styled.div`
   position: absolute;
@@ -43,9 +46,17 @@ const Header = styled.div`
 
 const AdminSidebar = () => {
   const [collapsed, setCollapsed] = useState(true);
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   const handleToggleCollapsed = () => {
     setCollapsed(!collapsed);
+  };
+
+  const handleLogout = () => {
+    // Remove access token from local storage
+    localStorage.removeItem('access-token');
+    // Navigate to the login page
+    navigate('/admin/login');
   };
 
   return (
@@ -70,7 +81,11 @@ const AdminSidebar = () => {
         </SidebarContent>
       )}
       <SidebarFooter style={{ textAlign: 'center', padding: '20px' }}>
-        {!collapsed && <div>Footer</div>}
+        {!collapsed && (
+          <IconButton onClick={handleLogout} color="inherit">
+            <Logout /> {/* Logout icon */}
+          </IconButton>
+        )}
       </SidebarFooter>
       {!collapsed && (
         <CloseButton collapsed={collapsed} onClick={handleToggleCollapsed}>

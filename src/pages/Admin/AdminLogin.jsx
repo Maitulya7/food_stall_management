@@ -2,29 +2,39 @@ import React, { useState } from 'react';
 import { TextField, Button, Grid, Typography, Box, IconButton, InputAdornment, Link } from '@mui/material';
 import { AccountCircle, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Formik, Form, Field } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import DEFAULT_URL from '../../config';
 import axios from 'axios';
 import Lottie from 'react-lottie'; // Importing Lottie
-import animationData from '../../images/admin-login-animation.json'; // Assuming your Lottie animation JSON file is in the same directory
+import animationData from '../../images/admin-login-animation.json';
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const AdminLogin = () => {
+  const navigate = useNavigate()
   const [emailExistsError, setEmailExistsError] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit =  (values) => {
     try {
-      const response = await axios.post(
+     axios.post(
         `${DEFAULT_URL}/api/v1/admin/login`,
         {
           admin: {
             email: values.email,
             password: values.password,
           },
-          client_id: "egp44hMIRaN2k3e6zLlo0svH2HXi944QxHIqLc50CYI"
+          client_id: "IIpISXH-UMnUpwIXxq46QG_VY9HU7-yMdT5cAT2fS3I"
         }
-      );
-      console.log(response);
+      ).then((res)=>{
+        navigate('/admin/home')
+        localStorage.setItem("access-token", res.data.admin.access_token);
+        toast.success('Login successful!'); // Display success toast
+        console.log(res)
+      }).catch((err)=>{
+        console.log(err)
+      });
     } catch (error) {
       console.error('Error logging in:', error);
       if (error.response && error.response.status === 409) {

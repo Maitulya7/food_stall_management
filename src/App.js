@@ -5,6 +5,8 @@ import {  Route, Routes } from 'react-router-dom';
 import AdminLogin from './pages/Admin/AdminLogin';
 import AdminRegister from './pages/Admin/AdminRegister';
 import AdminHome from './pages/Admin/AdminHome';
+import { ToastContainer } from 'react-toastify';
+import VendorRegister from './pages/Vendor/Auth/VendorRegister';
 
 
 function App() {
@@ -17,9 +19,11 @@ function App() {
         <Route path='/admin/home' element={<AdminHome/>}/>
 
         {/* Vendor route */}
+        <Route path='/vendor/register' element={<VendorRegister/>}/>
         {/* Customer route */}
 
     </Routes>
+    <ToastContainer />
     </>
   );
 }
