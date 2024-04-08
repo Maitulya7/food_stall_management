@@ -121,6 +121,7 @@ const MenuTable = ({ handleEdit, handleDelete }) => {
                     <FormControl fullWidth margin="dense">
                         <InputLabel>Item Type</InputLabel>
                         <Select
+                            label='Item Type'
                             name="item_type"
                             value={newItem.item_type}
                             onChange={handleChange}
@@ -132,6 +133,7 @@ const MenuTable = ({ handleEdit, handleDelete }) => {
                     <FormControl fullWidth margin="dense">
                         <InputLabel>Sub Type</InputLabel>
                         <Select
+                            label='Sub Type'
                             name="sub_type"
                             multiple
                             value={newItem.sub_type}
@@ -154,6 +156,7 @@ const MenuTable = ({ handleEdit, handleDelete }) => {
                     <FormControl fullWidth margin="dense">
                         <InputLabel>Taste</InputLabel>
                         <Select
+                            label='Taste'
                             name="taste"
                             multiple
                             value={newItem.taste}
@@ -176,6 +179,7 @@ const MenuTable = ({ handleEdit, handleDelete }) => {
                     <FormControl fullWidth margin="dense">
                         <InputLabel>Tags</InputLabel>
                         <Select
+                            label='Tags'
                             name="tags"
                             multiple
                             value={newItem.tags}
@@ -196,9 +200,9 @@ const MenuTable = ({ handleEdit, handleDelete }) => {
                         </Select>
                     </FormControl>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{display:'flex' , justifyContent:'space-between' , alignItems:'center' , paddingX:'24px', paddingY:'18px'}}>
                     <Button onClick={() => setOpen(false)}>Cancel</Button>
-                    <Button onClick={handleAddItem} color="primary">Add</Button>
+                    <Button onClick={handleAddItem} variant='contained' color="primary">Add</Button>
                 </DialogActions>
             </Dialog>
             <DataGrid

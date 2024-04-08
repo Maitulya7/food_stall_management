@@ -22,9 +22,9 @@ function VendorHome() {
             <Grid item xs={12}>
               <DashboardGrid onTabChange={handleTabChange} />
             </Grid>
-            {selectedTab === 'Oders' && (
+            {selectedTab === 'Oder' && (
               <Grid item xs={12}>
-                <Typography variant='h6'>Oders Table</Typography>
+                <Typography variant='h6'>Oder Table</Typography>
               </Grid>
             )}
             {selectedTab === 'Menu' && (

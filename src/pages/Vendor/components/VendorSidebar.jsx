@@ -6,10 +6,21 @@ import { Dashboard, Category } from '@mui/icons-material';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
-import { IconButton } from '@mui/material'; // Import IconButton
-import { Logout } from '@mui/icons-material'; // Import Logout icon
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for navigation
+import { IconButton } from '@mui/material';
+import { Logout } from '@mui/icons-material';
+import styled, { keyframes } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const SidebarToggle = styled.div`
   position: absolute;
@@ -23,7 +34,10 @@ const FullHeightSidebar = styled(ProSidebar)`
   height: 100vh;
   overflow: hidden;
   transition: width 0.3s;
-  background-color: #222831;
+  background: linear-gradient(to right, #222831, #4b778d);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  animation: ${fadeIn} 0.5s ease;
+  transform-style: preserve-3d;
 `;
 
 const CloseButton = styled.div`
@@ -34,22 +48,33 @@ const CloseButton = styled.div`
   cursor: pointer;
   transition: left 0.3s;
   &:hover {
-    color: #76ABAE;
+    color: #76abae;
   }
 `;
 
 const Header = styled.div`
   padding: 20px;
-  color: #76ABAE;
+  color: #76abae;
   font-size: 24px;
   font-weight: bold;
   text-align: center;
   display: ${({ collapsed }) => (collapsed ? 'none' : 'block')};
 `;
 
+const CustomMenuItem = styled(MenuItem)`
+  &:hover {
+
+    background: linear-gradient(to right, #4b778d, #a5ccd8);
+    color: #ffffff;
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+`;
+
 const VendorSidebar = () => {
   const [collapsed, setCollapsed] = useState(true);
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
 
   const handleToggleCollapsed = () => {
     setCollapsed(!collapsed);
@@ -65,30 +90,30 @@ const VendorSidebar = () => {
       <SidebarHeader>
         <Header collapsed={collapsed}>Vendor Panel</Header>
         <SidebarToggle onClick={handleToggleCollapsed}>
-          {collapsed ? <MdMenu style={{ fontSize: '24px', color: '#EEEEEE' }} /> : null}
+          {collapsed ? <MdMenu style={{ fontSize: '24px', color: '#eeeeee' }} /> : null}
         </SidebarToggle>
       </SidebarHeader>
       {!collapsed && (
         <SidebarContent>
           <Menu iconShape="square">
-            <MenuItem icon={<Dashboard />}>Dashboard</MenuItem>
-            <MenuItem icon={<FastfoodIcon />}>Oders</MenuItem>
-            <MenuItem icon={<Category />}>Menu</MenuItem>
-            <MenuItem icon={<MonetizationOnIcon />}>Bills</MenuItem>
-            <MenuItem icon={<AccountCircleIcon />}>Profile</MenuItem>
+            <CustomMenuItem style={{margin:"10px"}} icon={<Dashboard />}>Dashboard</CustomMenuItem>
+            <CustomMenuItem style={{margin:"10px"}} icon={<FastfoodIcon />}>Orders</CustomMenuItem>
+            <CustomMenuItem style={{margin:"10px"}} icon={<Category />}>Menu</CustomMenuItem>
+            <CustomMenuItem style={{margin:"10px"}} icon={<MonetizationOnIcon />}>Bills</CustomMenuItem>
+            <CustomMenuItem style={{margin:"10px"}} icon={<AccountCircleIcon />}>Profile</CustomMenuItem>
           </Menu>
         </SidebarContent>
       )}
       <SidebarFooter style={{ textAlign: 'center', padding: '20px' }}>
         {!collapsed && (
           <IconButton onClick={handleLogout} color="inherit">
-            <Logout /> {/* Logout icon */}
+            <Logout />
           </IconButton>
         )}
       </SidebarFooter>
       {!collapsed && (
         <CloseButton collapsed={collapsed} onClick={handleToggleCollapsed}>
-          <MdClose style={{ fontSize: '24px', color: '#EEEEEE' , cursor:"pointer"}} />
+          <MdClose style={{ fontSize: '24px', color: '#eeeeee', cursor: 'pointer' }} />
         </CloseButton>
       )}
     </FullHeightSidebar>
