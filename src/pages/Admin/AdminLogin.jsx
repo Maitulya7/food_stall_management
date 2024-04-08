@@ -7,7 +7,7 @@ import DEFAULT_URL from '../../config';
 import axios from 'axios';
 import Lottie from 'react-lottie'; // Importing Lottie
 import animationData from '../../images/admin-login-animation.json';
-import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
+import {toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; 
 
 const AdminLogin = () => {
@@ -38,7 +38,6 @@ const AdminLogin = () => {
     } catch (error) {
       console.error('Error logging in:', error);
       if (error.response && error.response.status === 409) {
-        // HTTP 409 indicates conflict, in this case, email already exists
         setEmailExistsError(true);
       } else {
         setError('Failed to log in. Please check your credentials.');

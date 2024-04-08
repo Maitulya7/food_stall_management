@@ -18,11 +18,11 @@ const RejectRequestTable = () => {
     { field: 'phone_number', headerName: 'Phone Number', width: 200 },
     { field: 'status', headerName: 'Status', width: 150 },
     { field: 'franchise', headerName: 'Franchise', width: 200 },
-    { field: 'franchise_details', headerName: 'Franchise Detail', width: 250 },
+    { field: 'franchise_details', headerName: 'Franchise Detail', width: 200 },
     {
       field: 'type_of_categories',
       headerName: 'Categories',
-      width: 160,
+      width: 150,
       sortable: false,
       renderCell: (params) => {
         const handleClick = (event) => {
@@ -61,7 +61,7 @@ const RejectRequestTable = () => {
   }, []);
 
   return (
-    <div style={{ height: 400, width: '100%', overflowX: 'auto' }}>
+    <div style={{ height: 400, width: '100%'}}>
       <DataGrid
          rows={rejectedRequests.map((request, index) => ({ ...request, srNo: index + 1 }))}
         columns={columns}

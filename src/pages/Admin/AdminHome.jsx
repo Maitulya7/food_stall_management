@@ -10,40 +10,11 @@ import CategoryTable from './components/Category/CategoryTable';
 
 const AdminHome = () => {
   const [selectedTab, setSelectedTab] = useState('pending');
-
+  
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
   };
 
-
-
-  const approvedRequests = [
-    {
-      id: 1,
-      email: 'john@example.com',
-      firstName: 'John',
-      lastName: 'Doe',
-      phoneNumber: '123-456-7890',
-      status: 'Pending',
-      franchise: 'Franchise ABC',
-      franchiseDetail: 'Details of Franchise ABC',
-      categories: ['Category 1', 'Category 2']
-    },
-  ];
-
-  const rejectedRequests = [
-    {
-      id: 1,
-      email: 'john@example.com',
-      firstName: 'John',
-      lastName: 'Doe',
-      phoneNumber: '123-456-7890',
-      status: 'Pending',
-      franchise: 'Franchise ABC',
-      franchiseDetail: 'Details of Franchise ABC',
-      categories: ['Category 1', 'Category 2']
-    },
-  ];
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -64,13 +35,13 @@ const AdminHome = () => {
             {selectedTab === 'approve' && (
               <Grid item xs={12}>
                 <Typography variant='h6'>Approved Request Table</Typography>
-                <ApproveRequestTable approvedRequests={approvedRequests} />
+                <ApproveRequestTable  />
               </Grid>
             )}
             {selectedTab === 'reject' && (
               <Grid item xs={12}>
                 <Typography variant='h6'>Rejected Request Table</Typography>
-                <RejectRequestTable rejectedRequests={rejectedRequests} />
+                <RejectRequestTable  />
               </Grid>
             )}
             {selectedTab === 'categories' && (

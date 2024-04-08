@@ -7,6 +7,8 @@ import AdminRegister from './pages/Admin/AdminRegister';
 import AdminHome from './pages/Admin/AdminHome';
 import { ToastContainer } from 'react-toastify';
 import VendorRegister from './pages/Vendor/Auth/VendorRegister';
+import VendorLogin from './pages/Vendor/Auth/VendorLogin';
+import VendorHome from './pages/Vendor/pages/VendorHome';
 
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
 
         {/* Vendor route */}
         <Route path='/vendor/register' element={<VendorRegister/>}/>
+        <Route path='/vendor/login' element={<VendorLogin/>}/>
+        <Route path='/vendor/home' element={<VendorHome/>}/>
         {/* Customer route */}
 
     </Routes>

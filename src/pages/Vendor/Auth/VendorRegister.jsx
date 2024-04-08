@@ -61,7 +61,7 @@ const VendorRegister = () => {
         formData.append('client_id' , "IIpISXH-UMnUpwIXxq46QG_VY9HU7-yMdT5cAT2fS3I")
         console.log(selectedCategories)
 
-        axios.post(`${DEFAULT_URL}/api/v1/vendor/sign_up`, formData, {
+        axios.post(`${DEFAULT_URL}/api/v1/vendor/sign_up`, formData ,{}, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -194,7 +194,7 @@ const VendorRegister = () => {
                     multiple
                     value={selectedCategories}
                     onChange={handleCategoryChange}
-                    renderValue={(selected) => selected.join(', ')}
+                    renderValue={(selected) => selected.join(',')}
                   >
                     {categories?.map((category) => (
                       <MenuItem key={category.id} value={category.name}>

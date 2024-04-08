@@ -10,16 +10,15 @@ import DEFAULT_URL from '../../../../config';
 const CategoryTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categories, setCategories] = useState([]);
-  console.log(categories.length)
 
   useEffect(() => {
-    // Fetch categories when the component mounts
     fetchCategories();
   }, []);
 
   const fetchCategories = () => {
     axios.get('http://localhost:3000/api/v1/admin/categories')
       .then(response => {
+        // Set categories state with the fetched data
         setCategories(response.data.categories);
       })
       .catch(error => {

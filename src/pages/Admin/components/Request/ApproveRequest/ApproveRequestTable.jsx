@@ -9,6 +9,7 @@ const ApproveRequestTable = ({ approvedRequests }) => {
   const [anchorEl, setAnchorEl] = useState(null); // State for popover anchor element
   const [popoverData, setPopoverData] = useState(null); // State for popover data
 
+
   const columns = [
     { field: 'srNo', headerName: 'Sr No', width: 100 },
     { field: 'email', headerName: 'Email', width: 250 },
