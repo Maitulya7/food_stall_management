@@ -1,9 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import DashboardBox from './DashboardBox';
+import axios from 'axios';
 
 const DashboardGrid = ({ onTabChange }) => {
-  const [selectedTab, setSelectedTab] = useState('pending'); // Set 'pending' as the initial selected tab
+  const [selectedTab, setSelectedTab] = useState('pending'); 
+  const [categoriesCount, setCategoriesCount] = useState(0);
+
+
+  useEffect(()=>{
+    fetchData()
+  },[])
+
+  const fetchData = () => {
+    axios.get('http://localhost:3000/api/v1/admin/categories')
+      .then(response => {
+        const categories = response.data.categories
+        setCategoriesCount(categories.length);
+      })
+      .catch(error => {
+        console.error('Error fetching categories:', error);
+      });
+  };
+
 
   // Function to handle clicking on a tab
   const handleTabClick = (tab) => {
@@ -23,7 +42,7 @@ const DashboardGrid = ({ onTabChange }) => {
         <DashboardBox label="Reject" value={3} color="#EB9196" selected={selectedTab === 'reject'} />
       </Grid>
       <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('categories')} style={{ cursor: 'pointer' }}>
-        <DashboardBox label="categories" value={8} color="#1976d2" selected={selectedTab === 'categories'} />
+        <DashboardBox label="categories" value={categoriesCount} color="#1976d2" selected={selectedTab === 'categories'} />
       </Grid>
     </Grid>
   );

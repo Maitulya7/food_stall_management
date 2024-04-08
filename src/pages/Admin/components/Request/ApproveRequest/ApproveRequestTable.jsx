@@ -1,72 +1,99 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Popover, Typography } from '@mui/material';
+import axios from 'axios';
+import { Button, Popover, Typography , ListItem  , List} from '@mui/material';
+import DEFAULT_URL from '../../../../../config';
 
 const ApproveRequestTable = ({ approvedRequests }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [approveRequests, setApprovRequests] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null); // State for popover anchor element
+  const [popoverData, setPopoverData] = useState(null); // State for popover data
 
   const columns = [
-    { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'firstName', headerName: 'First Name', width: 150 },
-    { field: 'lastName', headerName: 'Last Name', width: 150 },
-    { field: 'phoneNumber', headerName: 'Phone Number', width: 150 },
+    { field: 'srNo', headerName: 'Sr No', width: 100 },
+    { field: 'email', headerName: 'Email', width: 250 },
+    { field: 'first_name', headerName: 'First Name', width: 150 },
+    { field: 'last_name', headerName: 'Last Name', width: 150 },
+    { field: 'phone_number', headerName: 'Phone Number', width: 200 },
     { field: 'status', headerName: 'Status', width: 150 },
     { field: 'franchise', headerName: 'Franchise', width: 200 },
-    { field: 'franchiseDetail', headerName: 'Franchise Detail', width: 250 },
+    { field: 'franchise_details', headerName: 'Franchise Detail', width: 250 },
     {
-      field: 'categories',
+      field: 'type_of_categories',
       headerName: 'Categories',
-      width: 250,
+      width: 160,
       sortable: false,
-      renderCell: (params) => (
-        <div onMouseEnter={(event) => handlePopoverOpen(event, params.value)}>
-          {params.value.join(', ')}
-        </div>
-      ),
+      renderCell: (params) => {
+        const handleClick = (event) => {
+          setAnchorEl(event.currentTarget); // Setting anchor element for popover
+          setPopoverData(params.row.type_of_categories); // Setting popover data
+        };
+
+        return (
+          <div>
+            <Button onClick={handleClick}>View</Button> {/* Button to trigger popover */}
+          </div>
+        );
+      }
     },
   ];
 
-  const handlePopoverOpen = (event, categories) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedCategories(categories);
+  const handleClosePopover = () => {
+    setAnchorEl(null);
+    setPopoverData(null);
   };
 
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-    setSelectedCategories([]);
-  };
+  useEffect(() => {
+    const token = localStorage.getItem('access-token');
+    axios.get(`${DEFAULT_URL}/api/v1/admin/requests`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        const filteredRequests = res.data.requests.filter(request => request.status === 'approved');
+        setApprovRequests(filteredRequests);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div style={{ height: 400, width: '100%', overflowX: 'auto' }}>
       <DataGrid
-        rows={approvedRequests}
+         rows={approveRequests.map((request, index) => ({ ...request, srNo: index + 1 }))}
         columns={columns}
         pageSize={5}
         autoHeight
         disableColumnMenu
       />
-      <Popover
+        <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
-        onClose={handlePopoverClose}
+        onClose={handleClosePopover}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'left',
+          horizontal: 'right',
         }}
       >
-        <Typography style={{ padding: 10 }}>
-          {selectedCategories.map((category, index) => (
-            <span key={index}>
-              {category}
-              {index < selectedCategories.length - 1 && ', '}
-            </span>
-          ))}
-        </Typography>
+        {popoverData ? (
+          <div sx={{ p: 2 }}>
+            <List sx={{ p: 0, m: 0 }}>
+              {popoverData.map((category, index) => (
+                <ListItem key={index} sx={{ mb: 1 }}>
+                  <Typography>{category}</Typography>
+                </ListItem>
+              ))}
+            </List>
+          </div>
+        ) : (
+          <Typography sx={{ p: 2 }}>No categories available</Typography>
+        )}
       </Popover>
     </div>
   );

@@ -10,6 +10,7 @@ import DEFAULT_URL from '../../../../config';
 const CategoryTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categories, setCategories] = useState([]);
+  console.log(categories.length)
 
   useEffect(() => {
     // Fetch categories when the component mounts
@@ -19,7 +20,6 @@ const CategoryTable = () => {
   const fetchCategories = () => {
     axios.get('http://localhost:3000/api/v1/admin/categories')
       .then(response => {
-        // Set categories state with the fetched data
         setCategories(response.data.categories);
       })
       .catch(error => {
@@ -55,9 +55,7 @@ const CategoryTable = () => {
   };
   
   const handleAddCategory = (categoryName) => {
-    // Handle adding category action here
     console.log(`Adding category: ${categoryName}`);
-    // After adding the category, fetch categories again to update the list
     fetchCategories();
   };
 
@@ -68,6 +66,7 @@ const CategoryTable = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
 
   const columns = [
     { field: 'srNo', headerName: 'Sr No', width: 100 },
@@ -102,6 +101,7 @@ const CategoryTable = () => {
           Add Category
         </Button>
       </Box>
+ 
       <AddCategoryModal isOpen={isModalOpen} handleClose={handleCloseModal} handleAddCategory={handleAddCategory} />
       <DataGrid 
         rows={categories.map((category, index) => ({ ...category, srNo: index + 1 }))} 

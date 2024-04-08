@@ -15,19 +15,7 @@ const AdminHome = () => {
     setSelectedTab(tab);
   };
 
-  const pendingRequests = [
-    {
-      id: 1,
-      email: 'john@example.com',
-      firstName: 'John',
-      lastName: 'Doe',
-      phoneNumber: '123-456-7890',
-      status: 'Pending',
-      franchise: 'Franchise ABC',
-      franchiseDetail: 'Details of Franchise ABC',
-      categories: ['Category 1', 'Category 2']
-    },
-  ];
+
 
   const approvedRequests = [
     {
@@ -70,7 +58,7 @@ const AdminHome = () => {
             {selectedTab === 'pending' && (
               <Grid item xs={12}>
                 <Typography variant='h6'>Pending Request Table</Typography>
-                <PendingRequestTable pendingRequests={pendingRequests} /> 
+                <PendingRequestTable /> 
               </Grid>
             )}
             {selectedTab === 'approve' && (

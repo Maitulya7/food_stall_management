@@ -3,19 +3,19 @@ import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Checkbox,
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import DEFAULT_URL from '../../../config';
 
 const VendorRegister = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [hasFranchise, setHasFranchise] = useState(false);
-
+  const [logoFile, setLogoFile] = useState(null); 
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/api/v1/admin/categories`)
+    axios.get(`${DEFAULT_URL}/api/v1/admin/categories`)
       .then(response => {
         setCategories(response.data.categories);
-        console.log(response.data)
       })
       .catch(error => {
         console.error('Error fetching categories:', error);
@@ -29,8 +29,8 @@ const VendorRegister = () => {
       email: '',
       phoneNumber: '',
       password: '',
-      typeOfCategories: [],
-      franchise: false,
+      confirmPassword: '',
+      stallName: '',
       franchiseDetails: ''
     },
     validationSchema: Yup.object({
@@ -43,29 +43,33 @@ const VendorRegister = () => {
         .oneOf([Yup.ref('password'), null], 'Passwords must match')
         .required('Confirm Password is required'),
       stallName: Yup.string().required('Stall Name is required'),
+
     }),
     onSubmit: async values => {
       try {
-        const payload = {
-          vendor: {
-            first_name: values.firstName,
-            last_name: values.lastName,
-            email: values.email,
-            phone_number: values.phoneNumber,
-            password: values.password,
-            type_of_categories: selectedCategories,
-            franchise: hasFranchise,
-            franchise_details: values.franchiseDetails
-          },
-          client_id: "IIpISXH-UMnUpwIXxq46QG_VY9HU7-yMdT5cAT2fS3I"
-        };
+        const formData = new FormData();
+        formData.append('vendor[stall_logo]', logoFile); 
+        formData.append('vendor[first_name]', values.firstName);
+        formData.append('vendor[last_name]', values.lastName);
+        formData.append('vendor[email]', values.email);
+        formData.append('vendor[phone_number]', values.phoneNumber);
+        formData.append('vendor[password]', values.password);
+        formData.append('vendor[type_of_categories]', JSON.stringify(selectedCategories));
+        formData.append('vendor[stall_name]', values.stallName);
+        formData.append('vendor[franchise]', hasFranchise);
+        formData.append('vendor[franchise_details]', values.franchiseDetails);
+        formData.append('client_id' , "IIpISXH-UMnUpwIXxq46QG_VY9HU7-yMdT5cAT2fS3I")
+        console.log(selectedCategories)
 
-        axios.post(`${DEFAULT_URL}/api/v1/vendor/sign_up`, payload)
-          .then((res) => {
-            console.log(res)
-          }).catch((err) => {
-            console.log(err)
-          });
+        axios.post(`${DEFAULT_URL}/api/v1/vendor/sign_up`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then((res)=>{
+          console.log(res);
+        }).catch((err)=>{
+          console.log(err);
+        });
       } catch (error) {
         console.error('Registration failed:', error.message);
       }
@@ -81,6 +85,10 @@ const VendorRegister = () => {
     if (!hasFranchise) {
       formik.setFieldValue('franchiseDetails', ''); // Reset franchise details field
     }
+  };
+
+  const handleLogoChange = (event) => {
+    setLogoFile(event.target.files[0]); 
   };
 
   return (
@@ -180,7 +188,7 @@ const VendorRegister = () => {
                 <FormControl fullWidth>
                   <InputLabel id="categories-label">Categories</InputLabel>
                   <Select
-                    label="Categoreis"
+                    label="Categories"
                     labelId="categories-label"
                     id="categories"
                     multiple
@@ -197,6 +205,28 @@ const VendorRegister = () => {
                   </Select>
                 </FormControl>
               </Grid>
+              <Grid item xs={12}>
+                <input
+                  accept="image/*"
+                  id="logo-upload"
+                  type="file"
+                  style={{ display: 'none' }}
+                  onChange={handleLogoChange}
+                />
+                <label htmlFor="logo-upload">
+                  <Button
+                    type='button'
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    component="span"
+                    startIcon={<AttachFileIcon />}
+                  >
+                    Upload Logo
+                  </Button>
+                </label>
+              </Grid>
+
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <FormControlLabel
