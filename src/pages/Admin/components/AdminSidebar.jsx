@@ -44,6 +44,16 @@ const Header = styled.div`
   display: ${({ collapsed }) => (collapsed ? 'none' : 'block')};
 `;
 
+const CustomMenuItem = styled(MenuItem)`
+  &:hover {
+    background: linear-gradient(to right, #4b778d, #a5ccd8);
+    color: #ffffff;
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+`;
+
 const AdminSidebar = () => {
   const [collapsed, setCollapsed] = useState(true);
   const navigate = useNavigate(); // Initialize useNavigate hook
@@ -70,12 +80,12 @@ const AdminSidebar = () => {
       {!collapsed && (
         <SidebarContent>
           <Menu iconShape="square">
-            <MenuItem icon={<Dashboard />}>Dashboard</MenuItem>
-            <MenuItem icon={<Category />}>Category</MenuItem>
-            <SubMenu title="Request" icon={<Markunread />}>
-              <MenuItem icon={<CheckCircle />}>Accepted</MenuItem>
-              <MenuItem icon={<Schedule />}>Pending</MenuItem>
-              <MenuItem icon={<Cancel />}>Rejected</MenuItem>
+            <CustomMenuItem style={{margin:"10px"}} icon={<Dashboard />}>Dashboard</CustomMenuItem>
+            <CustomMenuItem style={{margin:"10px"}} icon={<Category />}>Category</CustomMenuItem>
+            <SubMenu  style={{margin:"10px"}} title="Request" icon={<Markunread />}>
+              <CustomMenuItem  icon={<CheckCircle />}>Accepted</CustomMenuItem>
+              <CustomMenuItem  icon={<Schedule />}>Pending</CustomMenuItem>
+              <CustomMenuItem   icon={<Cancel />}>Rejected</CustomMenuItem>
             </SubMenu>
           </Menu>
         </SidebarContent>
@@ -89,7 +99,7 @@ const AdminSidebar = () => {
       </SidebarFooter>
       {!collapsed && (
         <CloseButton collapsed={collapsed} onClick={handleToggleCollapsed}>
-          <MdClose style={{ fontSize: '24px', color: '#EEEEEE' , cursor:"pointer"}} />
+          <MdClose style={{ fontSize: '24px', color: '#EEEEEE', cursor: "pointer" }} />
         </CloseButton>
       )}
     </FullHeightSidebar>

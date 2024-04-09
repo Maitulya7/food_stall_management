@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
-import { Modal, Button, TextField, Box } from '@mui/material';
+import { Modal, Button, TextField, Box, Input, IconButton } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon
+import AttachFileIcon from '@mui/icons-material/AttachFile'; // Import AttachFileIcon
 import axios from 'axios';
+import DEFAULT_URL from '../../../../config';
 
 const AddCategoryModal = ({ isOpen, handleClose, handleAddCategory }) => {
   const [categoryName, setCategoryName] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleChange = (event) => {
     setCategoryName(event.target.value);
+  };
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
   };
 
   const handleSubmit = () => {
@@ -21,26 +28,29 @@ const AddCategoryModal = ({ isOpen, handleClose, handleAddCategory }) => {
       return;
     }
 
-    // Send POST request to create category
-    axios.post('http://localhost:3000/api/v1/admin/categories', {
-      name: categoryName
-    }, {
+    // Create FormData object to append the file
+    const formData = new FormData();
+    formData.append('category[name]', categoryName);
+    formData.append('category[image]', selectedFile);
+
+    // Send POST request to upload the image
+    axios.post(`${DEFAULT_URL}/api/v1/admin/categories`, formData, {
       headers: {
-        'Authorization': `Bearer ${accessToken}`
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data'
       }
     })
     .then(response => {
-      // Handle successful response
       console.log('Category created successfully:', response.data.category);
       console.log('Message:', response.data.message);
       handleAddCategory(response.data.category);
       setCategoryName('');
+      setSelectedFile(null);
       handleClose();
     })
     .catch(error => {
       // Handle error
       console.error('Error creating category:', error);
-     
     });
   };
 
@@ -78,6 +88,25 @@ const AddCategoryModal = ({ isOpen, handleClose, handleAddCategory }) => {
           onChange={handleChange}
           margin="normal"
         />
+        <div style={{ display: 'flex', alignItems: 'center', marginTop: '16px' }}>
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            sx={{ display: 'none' }}
+            id="image-upload"
+          />
+          <label htmlFor="image-upload">
+            <IconButton
+              color="primary"
+              aria-label="upload picture"
+              component="span"
+            >
+              <AttachFileIcon />
+            </IconButton>
+          </label>
+          <span style={{ marginLeft: '8px' }}>{selectedFile ? 'Image Selected' : 'Choose Image'}</span>
+        </div>
         <Button onClick={handleSubmit} variant="contained" color="primary" sx={{ mt: 2 }}>
           <AddCircleOutlineIcon sx={{ mr: 1 }} />
           Add Category

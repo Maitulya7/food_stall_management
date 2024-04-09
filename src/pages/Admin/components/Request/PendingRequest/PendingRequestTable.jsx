@@ -1,28 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Button, Popover, Typography , ListItem  , List} from '@mui/material'; // Importing Popover and Typography
+import { Button, Popover, Typography, ListItem, List, IconButton  , Modal, Box} from '@mui/material'; // Importing Popover and Typography
 import DEFAULT_URL from '../../../../../config';
+import InfoIcon from '@mui/icons-material/Info'; 
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const PendingRequestTable = () => {
   const [pendingRequest, setPendingRequest] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null); // State for popover anchor element
   const [popoverData, setPopoverData] = useState(null); // State for popover data
-  
+  const [selectedImageUrl, setSelectedImageUrl] = useState(''); 
+  const [openImageModal, setOpenImageModal] = useState(false);
+  const [details , setDetails] = useState('')
+  const [openDetailModal , setOpenDetailModal] = useState(false)
+
 
   const columns = [
     { field: 'srNo', headerName: 'Sr No', width: 100 },
-    { field: 'email', headerName: 'Email', width: 250 },
-    { field: 'first_name', headerName: 'First Name', width: 150 },
-    { field: 'last_name', headerName: 'Last Name', width: 150 },
-    { field: 'phone_number', headerName: 'Phone Number', width: 200 },
+    { field: 'email', headerName: 'Email', width: 200 },
+    { field: 'first_name', headerName: 'First Name', width: 150, flex: 1, overflow: 'hidden' }, // Adjusted width and overflow
+    { field: 'last_name', headerName: 'Last Name', width: 150, flex: 1, overflow: 'hidden' },
+    { field: 'stall_name', headerName: 'Stall Name', width: 150, flex: 1, overflow: 'hidden' }, // Adjusted width and overflow
+    { field: 'phone_number', headerName: 'Phone Number', width: 150 },
     { field: 'status', headerName: 'Status', width: 150 },
     { field: 'franchise', headerName: 'Franchise', width: 150 },
-    { field: 'franchise_details', headerName: 'Franchise Detail', width: 150 },
+    { field: 'franchise_details', headerName: 'Franchise Detail', width: 150, flex: 1.2, overflow: 'hidden',
+      renderCell: (params) => (
+        <IconButton onClick={() => handleViewFranchiseDetails(params.row.franchise_details)}>
+          <InfoIcon color='secondary' />
+        </IconButton>
+      )
+    },
+    {
+      field: 'stall_logo',
+      headerName: 'Stall Logo',
+      width: 150,
+      renderCell: (params) => (
+        <IconButton color="primary" onClick={() => handleViewLogo(params.row.stall_logo_url)}>
+          <VisibilityIcon />
+        </IconButton>
+      )
+    },
     {
       field: 'type_of_categories',
       headerName: 'Categories',
-      width: 160,
+      width: 150,
       sortable: false,
       renderCell: (params) => {
         const handleClick = (event) => {
@@ -40,32 +65,32 @@ const PendingRequestTable = () => {
     {
       field: 'approve',
       headerName: 'Approve',
-      width: 160,
+      width: 100,
       sortable: false,
       renderCell: (params) => {
         const handleApprove = () => {
-          axios.post(`${DEFAULT_URL}/api/v1/admin/approve_request/${params.row.id}`, {} , {
-            headers:{
+          axios.post(`${DEFAULT_URL}/api/v1/admin/approve_request/${params.row.id}`, {}, {
+            headers: {
               Authorization: `Bearer ${localStorage.getItem('access-token')}`,
             }
-          }).then((res)=>{
+          }).then((res) => {
             fetchPendingRequest();
-          }).catch((err)=>{
+          }).catch((err) => {
             console.log(err.message)
           })
         };
-  
+
         return (
-          <Button onClick={handleApprove} variant="contained" color="primary">
-            Approve
-          </Button>
+          <IconButton onClick={() => handleApprove(params.row.id)}>
+          <CheckCircleIcon color='success' />
+        </IconButton>
         );
       }
     },
     {
       field: 'reject',
       headerName: 'Reject',
-      width: 160,
+      width: 100,
       sortable: false,
       renderCell: (params) => {
         const handleReject = () => {
@@ -75,21 +100,40 @@ const PendingRequestTable = () => {
             },
           })
             .then((res) => {
-              fetchPendingRequest(); 
+              fetchPendingRequest();
             })
             .catch((err) => {
               console.error('Error rejecting request:', err);
             });
         };
-  
+
         return (
-          <Button onClick={handleReject} variant="contained" color="secondary">
-            Reject
-          </Button>
+          <IconButton onClick={() => handleReject(params.row.id)}>
+          <CancelIcon color='error' fontSize='lg' />
+        </IconButton>
         );
       }
     }
   ];
+  const handleViewFranchiseDetails = (details) => {
+    setDetails(details)
+    setOpenDetailModal(true)
+  };
+
+  const handleDetailCloseModal = () => {
+    setOpenDetailModal(false)
+  }
+
+  const handleViewLogo = (logoUrl) => {
+    setSelectedImageUrl(logoUrl);
+    setOpenImageModal(true);
+  };
+
+  const handleImageCloseModal = () => {
+    setOpenImageModal(false);
+  };
+
+  
 
 
 
@@ -154,7 +198,17 @@ const PendingRequestTable = () => {
           <Typography sx={{ p: 2 }}>No categories available</Typography>
         )}
       </Popover>
+      <Modal open={openImageModal} onClose={handleImageCloseModal}>
+        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', boxShadow: 24, p: 4, width: 400 }}>
+          <img src={selectedImageUrl} alt="Stall Logo" style={{ maxWidth: '100%', height: 'auto' }} />
+        </Box>
+      </Modal>
 
+      <Modal open={openDetailModal} onClose={handleDetailCloseModal}>
+        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', boxShadow: 24, p: 4, width: 400 }}>
+          <Typography>{details}</Typography>
+        </Box>
+      </Modal>
 
     </div>
   );

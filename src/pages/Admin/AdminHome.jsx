@@ -32,13 +32,13 @@ const AdminHome = () => {
                 <PendingRequestTable /> 
               </Grid>
             )}
-            {selectedTab === 'approve' && (
+            {selectedTab === 'approved' && (
               <Grid item xs={12}>
                 <Typography variant='h6'>Approved Request Table</Typography>
                 <ApproveRequestTable  />
               </Grid>
             )}
-            {selectedTab === 'reject' && (
+            {selectedTab === 'rejected' && (
               <Grid item xs={12}>
                 <Typography variant='h6'>Rejected Request Table</Typography>
                 <RejectRequestTable  />

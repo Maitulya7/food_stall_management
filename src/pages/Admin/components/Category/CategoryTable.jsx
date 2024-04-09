@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { IconButton, Button, Typography, Box } from '@mui/material';
+import { IconButton, Button, Typography, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete'; // Import DeleteIcon
 import AddCategoryModal from './AddCategoryModal';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
 import DEFAULT_URL from '../../../../config';
 
 const CategoryTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [openImageModal, setOpenImageModal] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
     fetchCategories();
@@ -18,7 +21,6 @@ const CategoryTable = () => {
   const fetchCategories = () => {
     axios.get('http://localhost:3000/api/v1/admin/categories')
       .then(response => {
-        // Set categories state with the fetched data
         setCategories(response.data.categories);
       })
       .catch(error => {
@@ -67,9 +69,28 @@ const CategoryTable = () => {
   };
 
 
+  const handleViewImage = (imageUrl) => {
+    setImageUrl(imageUrl);
+    setOpenImageModal(true);
+  };
+
+  const handleCloseImageModal = () => {
+    setOpenImageModal(false);
+  };
+
   const columns = [
     { field: 'srNo', headerName: 'Sr No', width: 100 },
     { field: 'name', headerName: 'Category Name', width: 200 },
+    {
+      field: 'viewImage',
+      headerName: 'View Image',
+      width: 150,
+      renderCell: (params) => (
+        <IconButton color="primary" size="small" onClick={() => handleViewImage(params.row.image_url)}>
+          <VisibilityIcon />
+        </IconButton>
+      ),
+    },
     {
       field: 'edit',
       headerName: 'Edit',
@@ -107,6 +128,17 @@ const CategoryTable = () => {
         columns={columns} 
         pageSize={5} 
       />
+       <Dialog open={openImageModal} onClose={handleCloseImageModal}>
+        <DialogTitle>View Image</DialogTitle>
+        <DialogContent>
+          <img src={imageUrl} alt="Category Image" style={{ maxWidth: '100%', maxHeight: '400px' }} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseImageModal} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

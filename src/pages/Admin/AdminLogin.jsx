@@ -25,7 +25,7 @@ const AdminLogin = () => {
             email: values.email,
             password: values.password,
           },
-          client_id: "IIpISXH-UMnUpwIXxq46QG_VY9HU7-yMdT5cAT2fS3I"
+          client_id: "yNpIEDPaAAN_hAtS9zWYFKRJA9nlBhE7Xv1BORFSWQQ"
         }
       ).then((res)=>{
         navigate('/admin/home')

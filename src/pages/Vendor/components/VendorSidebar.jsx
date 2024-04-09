@@ -6,10 +6,11 @@ import { Dashboard, Category } from '@mui/icons-material';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
+import EqualizerIcon from '@mui/icons-material/Equalizer';
 import { IconButton } from '@mui/material';
 import { Logout } from '@mui/icons-material';
 import styled, { keyframes } from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const fadeIn = keyframes`
   from {
@@ -96,11 +97,8 @@ const VendorSidebar = () => {
       {!collapsed && (
         <SidebarContent>
           <Menu iconShape="square">
-            <CustomMenuItem style={{margin:"10px"}} icon={<Dashboard />}>Dashboard</CustomMenuItem>
-            <CustomMenuItem style={{margin:"10px"}} icon={<FastfoodIcon />}>Orders</CustomMenuItem>
-            <CustomMenuItem style={{margin:"10px"}} icon={<Category />}>Menu</CustomMenuItem>
-            <CustomMenuItem style={{margin:"10px"}} icon={<MonetizationOnIcon />}>Bills</CustomMenuItem>
-            <CustomMenuItem style={{margin:"10px"}} icon={<AccountCircleIcon />}>Profile</CustomMenuItem>
+            <CustomMenuItem style={{margin:"10px"}} icon={<Dashboard />}><Link to='/vendor/home'>Dashboard</Link></CustomMenuItem>
+            <CustomMenuItem style={{margin:"10px"}} icon={<AccountCircleIcon />}><Link to="/vendor/profile">Profile</Link></CustomMenuItem>
           </Menu>
         </SidebarContent>
       )}

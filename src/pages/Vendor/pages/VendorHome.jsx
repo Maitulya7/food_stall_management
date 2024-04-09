@@ -38,7 +38,7 @@ function VendorHome() {
                 <Typography variant='h6'>Bills  Table</Typography>
               </Grid>
             )}
-            {selectedTab === 'Profile' && (
+            {selectedTab === 'Analysis' && (
               <Grid item xs={12}>
               </Grid>
             )}

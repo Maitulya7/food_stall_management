@@ -10,7 +10,7 @@ const VendorRegister = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [hasFranchise, setHasFranchise] = useState(false);
-  const [logoFile, setLogoFile] = useState(null); 
+  const [logoFile, setLogoFile] = useState(null);
 
   useEffect(() => {
     axios.get(`${DEFAULT_URL}/api/v1/admin/categories`)
@@ -48,7 +48,7 @@ const VendorRegister = () => {
     onSubmit: async values => {
       try {
         const formData = new FormData();
-        formData.append('vendor[stall_logo]', logoFile); 
+        formData.append('vendor[stall_logo]', logoFile);
         formData.append('vendor[first_name]', values.firstName);
         formData.append('vendor[last_name]', values.lastName);
         formData.append('vendor[email]', values.email);
@@ -58,16 +58,16 @@ const VendorRegister = () => {
         formData.append('vendor[stall_name]', values.stallName);
         formData.append('vendor[franchise]', hasFranchise);
         formData.append('vendor[franchise_details]', values.franchiseDetails);
-        formData.append('client_id' , "IIpISXH-UMnUpwIXxq46QG_VY9HU7-yMdT5cAT2fS3I")
+        formData.append('client_id', "yNpIEDPaAAN_hAtS9zWYFKRJA9nlBhE7Xv1BORFSWQQ")
         console.log(selectedCategories)
 
-        axios.post(`${DEFAULT_URL}/api/v1/vendor/sign_up`, formData ,{}, {
+        axios.post(`${DEFAULT_URL}/api/v1/vendor/sign_up`, formData, {}, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
-        }).then((res)=>{
+        }).then((res) => {
           console.log(res);
-        }).catch((err)=>{
+        }).catch((err) => {
           console.log(err);
         });
       } catch (error) {
@@ -88,7 +88,7 @@ const VendorRegister = () => {
   };
 
   const handleLogoChange = (event) => {
-    setLogoFile(event.target.files[0]); 
+    setLogoFile(event.target.files[0]);
   };
 
   return (
@@ -198,12 +198,19 @@ const VendorRegister = () => {
                   >
                     {categories?.map((category) => (
                       <MenuItem key={category.id} value={category.name}>
-                        <Checkbox checked={selectedCategories.indexOf(category.name) > -1} />
-                        <ListItemText primary={category.name} />
+                        <Grid container alignItems="center">
+                          <Grid item>
+                            <img src={category.image_url} alt={category.name} style={{ width: 30, height: 30, borderRadius: '50%', marginRight: 10 }} />
+                          </Grid>
+                          <Grid item>
+                            <ListItemText primary={category.name} />
+                          </Grid>
+                        </Grid>
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
+
               </Grid>
               <Grid item xs={12}>
                 <input

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Grid } from '@mui/material';
 import DashboardBox from './DashoboardBox';
-import { ShoppingCart, Receipt, AccountCircle } from '@mui/icons-material';
+import { ShoppingCart } from '@mui/icons-material';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import EqualizerIcon from '@mui/icons-material/Equalizer';
 
 const DashboardGrid = ({ onTabChange }) => {
   const [selectedTab, setSelectedTab] = useState('Oder'); 
@@ -21,10 +23,10 @@ const DashboardGrid = ({ onTabChange }) => {
         <DashboardBox label="Menu" color="#ff9800" selected={selectedTab === 'Menu'} icon={<RestaurantMenuIcon  fontSize='large'/>} />
       </Grid>
       <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Bills')} style={{ cursor: 'pointer' }}>
-        <DashboardBox label="Bills" color="#EB9196" selected={selectedTab === 'Bills'} icon={<Receipt fontSize='large' />} />
+        <DashboardBox label="Bills" color="#EB9196" selected={selectedTab === 'Bills'} icon={<MonetizationOnIcon fontSize='large' />} />
       </Grid>
-      <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Profile')} style={{ cursor: 'pointer' }}>
-        <DashboardBox label="Profile" color="#1976d2" selected={selectedTab === 'Profile'} icon={<AccountCircle  fontSize='large'/>} />
+      <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Analysis')} style={{ cursor: 'pointer' }}>
+        <DashboardBox label="Analysis" color="#1976d2" selected={selectedTab === 'Analysis'} icon={<EqualizerIcon  fontSize='large'/>} />
       </Grid>
     </Grid>
   );
