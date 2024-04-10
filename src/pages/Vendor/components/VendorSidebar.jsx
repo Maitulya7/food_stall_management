@@ -83,6 +83,7 @@ const VendorSidebar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('access-token');
+    localStorage.removeItem('categories')
     navigate('/vendor/login');
   };
 

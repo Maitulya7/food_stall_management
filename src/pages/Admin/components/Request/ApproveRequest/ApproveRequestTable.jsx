@@ -49,8 +49,8 @@ const ApproveRequestTable = ({ approvedRequests }) => {
       sortable: false,
       renderCell: (params) => {
         const handleClick = (event) => {
-          setAnchorEl(event.currentTarget); // Setting anchor element for popover
-          setPopoverData(params.row.type_of_categories); // Setting popover data
+          setAnchorEl(event.currentTarget); 
+          setPopoverData(params.row.type_of_categories); 
         };
 
         return (

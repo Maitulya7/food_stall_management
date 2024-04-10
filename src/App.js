@@ -10,6 +10,7 @@ import VendorRegister from './pages/Vendor/Auth/VendorRegister';
 import VendorLogin from './pages/Vendor/Auth/VendorLogin';
 import VendorHome from './pages/Vendor/pages/VendorHome';
 import VendorProfile from './pages/Vendor/pages/VendorProfile';
+import CustomerLandingPage from './pages/Customer/CustomerLandingPage';
 
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
         <Route path='/vendor/home' element={<VendorHome/>}/>
         <Route path='/vendor/profile' element={<VendorProfile/>}/>
         {/* Customer route */}
-
+        <Route path="/" element={<CustomerLandingPage/>}/>
     </Routes>
     <ToastContainer />
     </>

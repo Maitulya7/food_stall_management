@@ -7,12 +7,16 @@ import AddCategoryModal from './AddCategoryModal';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
 import DEFAULT_URL from '../../../../config';
+import DeleteConfirmationModal from '../../../components/DeleteConfirmationModal';
 
 const CategoryTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [openImageModal, setOpenImageModal] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
+  const [selectedItemIdToDelete, setSelectedItemIdToDelete] = useState(null);
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+
 
   useEffect(() => {
     fetchCategories();
@@ -78,6 +82,23 @@ const CategoryTable = () => {
     setOpenImageModal(false);
   };
 
+  const handleDeleteConfirmationOpen = (itemId) => {
+    setSelectedItemIdToDelete(itemId);
+    setDeleteConfirmationOpen(true);
+  };
+
+  const handleDeleteConfirmationClose = () => {
+    setSelectedItemIdToDelete(null);
+    setDeleteConfirmationOpen(false);
+  };
+
+  const handleConfirmDeleteItem = () => {
+    if (selectedItemIdToDelete) {
+      handleDelete(selectedItemIdToDelete);
+      handleDeleteConfirmationClose();
+    }
+  };
+
   const columns = [
     { field: 'srNo', headerName: 'Sr No', width: 100 },
     { field: 'name', headerName: 'Category Name', width: 200 },
@@ -104,10 +125,10 @@ const CategoryTable = () => {
     {
       field: 'delete',
       headerName: 'Delete',
-      width: 100,
+      width: 150,
       renderCell: (params) => (
-        <IconButton color="error" size="small" onClick={() => handleDelete(params.row.id)}>
-          <DeleteIcon />
+        <IconButton onClick={() => handleDeleteConfirmationOpen(params.row.id)}>
+          <DeleteIcon color='error' />
         </IconButton>
       ),
     },
@@ -139,6 +160,12 @@ const CategoryTable = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <DeleteConfirmationModal
+        open={deleteConfirmationOpen}
+        onClose={handleDeleteConfirmationClose}
+        onConfirm={handleConfirmDeleteItem}
+      />
     </div>
   );
 };

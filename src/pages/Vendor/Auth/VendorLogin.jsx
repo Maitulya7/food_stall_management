@@ -43,6 +43,9 @@ const VendorLogin = () => {
       }).then((res) => {
         navigate("/vendor/home");
         toast.success('Login successful!');
+        const categories = res.data.categories;
+        const categoriesString = JSON.stringify(categories);
+        localStorage.setItem("categories", categoriesString);
         localStorage.setItem("access-token", res.data.access_token);
         
       }).catch((err) => {

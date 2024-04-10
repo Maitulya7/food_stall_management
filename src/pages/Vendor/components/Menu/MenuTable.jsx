@@ -1,79 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, FormControl, InputLabel, Select, MenuItem, Chip, IconButton, Grid, ListItemText } from '@mui/material';
+import { Button, FormControl, Typography, Box, MenuItem, InputLabel, Select, IconButton, Grid, ListItemText } from '@mui/material';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DEFAULT_URL from '../../../../config';
+import DialogBox from './DialogBox';
+import CustomPopover from './CustomPopover';
+import DeleteConfirmationModal from '../../../components/DeleteConfirmationModal';
 
-const MenuTable = ({ }) => {
-  const [singleCategory, setSingleCategory] = useState('')
-  const [open, setOpen] = useState(false);
-  const [categories, setCategories] = useState([])
-  const [newItem, setNewItem] = useState({
-    name: '',
-    item_type: '',
-    sub_type: [],
-    taste: [],
-    tags: [],
-    price: ''
-  });
+const MenuTable = () => {
   const [menuData, setMenuData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [editItemData, setEditItemData] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('All Items');
+  const [error, setError] = useState(null);
+  const [subTypeAnchorEl, setSubTypeAnchorEl] = useState(null);
+  const [tasteAnchorEl, setTasteAnchorEl] = useState(null);
+  const [tagsAnchorEl, setTagsAnchorEl] = useState(null);
+  const [popoverData, setPopoverData] = useState({});
+  const [selectedItemIdToDelete, setSelectedItemIdToDelete] = useState(null);
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
 
-  useEffect(() => {
-    fetchMenuItems();
-    fetchCategories()
-  }, []);
+  const storedCategoriesString = localStorage.getItem("categories");
+  const storedCategories = JSON.parse(storedCategoriesString);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setNewItem({
-      ...newItem,
-      [name]: value
-    });
-  };
-
-  const handleMultiSelectChange = (event) => {
-    const { name, value } = event.target;
-    setNewItem((prevItem) => ({
-      ...prevItem,
-      [name]: value,
-    }));
-  };
-
-  const handleAddItem = () => {
-    const postData = {
-      food_item: {
-        name: newItem.name,
-        item_type: newItem.item_type,
-        sub_type: newItem.sub_type,
-        taste: newItem.taste,
-        tags: newItem.tags,
-        price: newItem.price,
-      }
-    };
-
+  const fetchMenuItems = () => {
     const accessToken = localStorage.getItem("access-token");
-    axios.post(`${DEFAULT_URL}/api/v1/vendor/food_items?category_id=${singleCategory}`, postData, {
+    let url = `${DEFAULT_URL}/api/v1/vendor/food_items`;
+
+    if (selectedCategory && selectedCategory !== "All Items") {
+      url += `?category_name=${encodeURIComponent(selectedCategory)}`;
+    }
+
+    axios.get(url, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
       }
     })
       .then(response => {
-        console.log('Item added successfully:', response.data);
-        setMenuData([...menuData, response.data.food_item]);
-        setNewItem({
-          name: '',
-          item_type: '',
-          sub_type: [],
-          taste: [],
-          tags: [],
-          price: '',
-        });
-        setOpen(false);
+        setMenuData(response.data.food_items);
+        setError(null);
       })
       .catch(error => {
-        console.error('Error adding item:', error);
+        if (error.response && error.response.status === 404) {
+          setError(`No Item Available for ${selectedCategory} Category.`);
+        } else {
+          console.error('Error fetching menu items:', error);
+        }
       });
   };
 
@@ -87,72 +61,139 @@ const MenuTable = ({ }) => {
     })
       .then(response => {
         console.log('Item deleted successfully:', response.data);
-        setMenuData(menuData.filter(item => item.food_item_id !== foodItemId));
-        fetchMenuItems()
-
+        fetchMenuItems();
       })
       .catch(error => {
         console.error('Error deleting item:', error);
-        console.log(menuData);
-        console.log(foodItemId);
       });
   };
 
-
-  const fetchMenuItems = () => {
-    const accessToken = localStorage.getItem("access-token");
-    axios.get(`${DEFAULT_URL}/api/v1/vendor/food_items`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-      }
-    })
-      .then(response => {
-        setMenuData(response.data.food_items);
-      })
-      .catch(error => {
-        console.error('Error fetching menu items:', error);
-      });
+  const handleEditItem = (item) => {
+    setEditItemData(item);
+    setOpen(true);
   };
 
-  const fetchCategories = () => {
-    axios.get('http://localhost:3000/api/v1/admin/categories')
-      .then(response => {
-        setCategories(response.data.categories);
-      })
-      .catch(error => {
-        console.error('Error fetching categories:', error);
-      });
+  const handlePopoverOpen = (event, rowData, type) => {
+    switch (type) {
+      case 'subType':
+        setSubTypeAnchorEl(event.currentTarget);
+        break;
+      case 'taste':
+        setTasteAnchorEl(event.currentTarget);
+        break;
+      case 'tags':
+        setTagsAnchorEl(event.currentTarget);
+        break;
+      default:
+        break;
+    }
+    setPopoverData(rowData);
   };
+
+  const handlePopoverClose = (type) => {
+    switch (type) {
+      case 'subType':
+        setSubTypeAnchorEl(null);
+        break;
+      case 'taste':
+        setTasteAnchorEl(null);
+        break;
+      case 'tags':
+        setTagsAnchorEl(null);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleDeleteConfirmationOpen = (itemId) => {
+    setSelectedItemIdToDelete(itemId);
+    setDeleteConfirmationOpen(true);
+  };
+
+  const handleDeleteConfirmationClose = () => {
+    setSelectedItemIdToDelete(null);
+    setDeleteConfirmationOpen(false);
+  };
+
+  const handleConfirmDeleteItem = () => {
+    if (selectedItemIdToDelete) {
+      handleDeleteItem(selectedItemIdToDelete);
+      handleDeleteConfirmationClose();
+    }
+  };
+
+  useEffect(() => {
+    fetchMenuItems();
+  }, [selectedCategory]);
 
   const columns = [
     { field: 'id', headerName: 'Sr. No.', width: 100 },
-    { field: 'name', headerName: 'Name', width: 150 },
+    { field: 'name', headerName: 'Name', width: 200 },
     { field: 'item_type', headerName: 'Item Type', width: 150 },
-    { field: 'sub_type', headerName: 'Sub Type', width: 200 },
-    { field: 'taste', headerName: 'Taste', width: 200 },
-    { field: 'tags', headerName: 'Tags', width: 200 },
-    { field: 'price', headerName: 'Price', width: 120 },
+    {
+      field: 'sub_type',
+      headerName: 'Sub Type',
+      width: 200,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={(e) => handlePopoverOpen(e, params.row, 'subType')}
+        >
+          Sub Type
+        </Button>
+      ),
+    },
+    {
+      field: 'taste',
+      headerName: 'Taste',
+      width: 200,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={(e) => handlePopoverOpen(e, params.row, 'taste')}
+        >
+          Taste
+        </Button>
+      ),
+    },
+    {
+      field: 'tags',
+      headerName: 'Tags',
+      width: 200,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={(e) => handlePopoverOpen(e, params.row, 'tags')}
+        >
+          Tags
+        </Button>
+      ),
+    },
+    { field: 'price', headerName: 'Price', width: 150 },
     {
       field: 'edit',
       headerName: 'Edit',
-      width: 100,
+      width: 150,
       renderCell: (params) => (
-        <IconButton >
-          <EditIcon />
+        <IconButton onClick={() => handleEditItem(params.row)}>
+          <EditIcon color='primary' />
         </IconButton>
       ),
     },
     {
       field: 'delete',
       headerName: 'Delete',
-      width: 120,
+      width: 150,
       renderCell: (params) => (
-        <IconButton onClick={() => handleDeleteItem(params.row.foodItemId, console.log(params.row.foodItemId))}>
-          <DeleteIcon />
+        <IconButton onClick={() => handleDeleteConfirmationOpen(params.row.foodItemId)}>
+          <DeleteIcon color='error' />
         </IconButton>
       ),
     },
-
   ];
 
   const rows = menuData.map((item, index) => ({
@@ -160,128 +201,28 @@ const MenuTable = ({ }) => {
     id: index + 1,
     name: item.name,
     item_type: item.item_type,
-    sub_type: item.sub_type.join(', '),
-    taste: item.taste.join(', '),
-    tags: item.tags.join(', '),
+    sub_type: item.sub_type,
+    taste: item.taste,
+    tags: item.tags,
     price: item.price,
   }));
 
   return (
     <div style={{ height: 400, width: '100%' }}>
-      <Button variant="contained" sx={{ marginY: "10px", width: "15%" }} color="primary" onClick={() => setOpen(true)}>Add Item</Button>
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Add New Item</DialogTitle>
-        <DialogContent>
-          <TextField
-            margin="dense"
-            name="name"
-            label="Name"
-            fullWidth
-            value={newItem.name}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            name="price"
-            label="Price"
-            fullWidth
-            type="number"
-            value={newItem.price}
-            onChange={handleChange}
-          />
-          <FormControl fullWidth margin="dense">
-            <InputLabel>Item Type</InputLabel>
-            <Select
-              label='Item Type'
-              name="item_type"
-              value={newItem.item_type}
-              onChange={handleChange}
-            >
-              <MenuItem value="Veg">Veg</MenuItem>
-              <MenuItem value="Non-Veg">Non-Veg</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth margin="dense">
-            <InputLabel>Sub Type</InputLabel>
-            <Select
-              label='Sub Type'
-              name="sub_type"
-              multiple
-              value={newItem.sub_type}
-              onChange={handleMultiSelectChange}
-              renderValue={(selected) => (
-                <div>
-                  {selected.map((value) => (
-                    <Chip key={value} label={value} />
-                  ))}
-                </div>
-              )}
-            >
-              {['jain', 'swaminarayan', 'regular'].map((subType) => (
-                <MenuItem key={subType} value={subType}>
-                  {subType}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth margin="dense">
-            <InputLabel>Taste</InputLabel>
-            <Select
-              label='Taste'
-              name="taste"
-              multiple
-              value={newItem.taste}
-              onChange={handleMultiSelectChange}
-              renderValue={(selected) => (
-                <div>
-                  {selected.map((value) => (
-                    <Chip key={value} label={value} />
-                  ))}
-                </div>
-              )}
-            >
-              {['spicy', 'medium', 'light'].map((taste) => (
-                <MenuItem key={taste} value={taste}>
-                  {taste}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth margin="dense">
-            <InputLabel>Tags</InputLabel>
-            <Select
-              label='Tags'
-              name="tags"
-              multiple
-              value={newItem.tags}
-              onChange={handleMultiSelectChange}
-              renderValue={(selected) => (
-                <div>
-                  {selected.map((value) => (
-                    <Chip key={value} label={value} />
-                  ))}
-                </div>
-              )}
-            >
-              {['best_seller', 'kids', 'starter', 'yummy', 'healthy'].map((tag) => (
-                <MenuItem key={tag} value={tag}>
-                  {tag}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel id="categories-label">Categories</InputLabel>
-            <Select
-              label="Categories"
-              labelId="categories-label"
-              id="categories"
-              value={(e) => setSingleCategory(e.target.value)}
-              onChange={handleChange}
-              renderValue={(selected) => selected}
-            >
-              {categories?.map((category) => (
-                <MenuItem key={category.id} value={category.id}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", gap: "15px", marginBottom: "15px" }}>
+        <Button variant="contained" sx={{ marginY: "10px", width: "15%" }} color="primary" onClick={() => setOpen(true)}>Add Item</Button>
+        <FormControl sx={{ width: "25%" }} margin="dense">
+          <InputLabel>Select Category</InputLabel>
+          <Select
+            label='Select Category'
+            name="item_type"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            inputProps={{ preserveWhitespace: 'true' }}
+          > 
+          <MenuItem value="All Items" sx={{padding:"15px"}}>All Items</MenuItem>
+            {storedCategories?.map((category) => (
+                <MenuItem key={category.id} value={category.name}>
                   <Grid container alignItems="center">
                     <Grid item>
                       <img src={category.image_url} alt={category.name} style={{ width: 30, height: 30, borderRadius: '50%', marginRight: 10 }} />
@@ -292,21 +233,59 @@ const MenuTable = ({ }) => {
                   </Grid>
                 </MenuItem>
               ))}
-            </Select>
-          </FormControl>
-        </DialogContent>
+          </Select>
+        </FormControl>
+      </Box>
 
-        <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: '24px', paddingY: '18px' }}>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={handleAddItem} variant='contained' color="primary">Add</Button>
-        </DialogActions>
-      </Dialog>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5, 10, 20]}
-        checkboxSelection
+      {error && (
+        <Typography variant="body1" color="error">
+          {error}
+        </Typography>
+      )}
+
+      {!error && (
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5, 10, 20]}
+        />
+      )}
+
+      <CustomPopover
+        open={Boolean(subTypeAnchorEl)}
+        anchorEl={subTypeAnchorEl}
+        onClose={() => handlePopoverClose('subType')}
+        popoverData={popoverData}
+        type="sub_type"
+      />
+
+      <CustomPopover
+        open={Boolean(tasteAnchorEl)}
+        anchorEl={tasteAnchorEl}
+        onClose={() => handlePopoverClose('taste')}
+        popoverData={popoverData}
+        type="taste"
+      />
+
+      <CustomPopover
+        open={Boolean(tagsAnchorEl)}
+        anchorEl={tagsAnchorEl}
+        onClose={() => handlePopoverClose('tags')}
+        popoverData={popoverData}
+        type="tags"
+      />
+
+      <DialogBox
+        open={open}
+        setOpen={setOpen}
+        fetchMenuItems={fetchMenuItems}
+        editItemData={editItemData}
+      />
+       <DeleteConfirmationModal
+        open={deleteConfirmationOpen}
+        onClose={handleDeleteConfirmationClose}
+        onConfirm={handleConfirmDeleteItem}
       />
     </div>
   );
