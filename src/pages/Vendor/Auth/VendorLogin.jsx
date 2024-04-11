@@ -47,6 +47,8 @@ const VendorLogin = () => {
         const categoriesString = JSON.stringify(categories);
         localStorage.setItem("categories", categoriesString);
         localStorage.setItem("access-token", res.data.access_token);
+        localStorage.setItem("stall_name" , res.data.vendor.stall_name)
+        localStorage.setItem("stall_logo", res.data.vendor.stall_logo_url)
         
       }).catch((err) => {
         if (err.response && err.response.status === 404) {
