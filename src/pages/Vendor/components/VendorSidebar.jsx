@@ -84,6 +84,9 @@ const VendorSidebar = () => {
   const handleLogout = () => {
     localStorage.removeItem('access-token');
     localStorage.removeItem('categories')
+    localStorage.removeItem('stall_name');
+    localStorage.removeItem('stall_logo');
+    localStorage.removeItem('user-type')
     navigate('/vendor/login');
   };
 

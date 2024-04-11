@@ -63,9 +63,8 @@ const AdminSidebar = () => {
   };
 
   const handleLogout = () => {
-    // Remove access token from local storage
     localStorage.removeItem('access-token');
-    // Navigate to the login page
+    localStorage.removeItem('user-type')
     navigate('/admin/login');
   };
 

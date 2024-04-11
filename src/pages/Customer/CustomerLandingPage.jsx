@@ -6,6 +6,8 @@ import DownloadSection from './components/DownloadSection';
 import ExtraFeatureSection from './components/ExtraFeatureSection';
 import AppInformationSection from './components/AppInformationSection';
 import ClientReviewSection from './components/ClientReviewSection';
+import ContactUsSection from './components/ContactUsSection';
+import Footer from './components/Footer';
 
 
 const CustomerLandingPage = () => {
@@ -18,6 +20,8 @@ const CustomerLandingPage = () => {
       <ExtraFeatureSection/>
       <AppInformationSection/>
       <ClientReviewSection/>
+      <ContactUsSection/>
+      <Footer/>
     </>
   );
 };

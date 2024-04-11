@@ -36,7 +36,6 @@ const ClientReviewSection = () => {
       rating: 4,
       review: 'Great app! I love the user interface and features.',
     },
-    // Add more reviews as necessary
   ];
 
   const scrollContainerRef = useRef(null);
@@ -51,7 +50,7 @@ const ClientReviewSection = () => {
 
   return (
     <Box sx={{ py: 6, px: { xs: 2, sm: 4, md: 6, lg: 8 } }}>
-      <Typography variant="h4" sx={{ textAlign: 'center', mb: 4 }}>
+      <Typography variant="h3" sx={{ textAlign: 'center', mb: 4 , color:"#047857", fontWeight:"bold"}}>
         Client Reviews
       </Typography>
       <Box

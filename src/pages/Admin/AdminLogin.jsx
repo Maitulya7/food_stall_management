@@ -28,8 +28,10 @@ const AdminLogin = () => {
           client_id: "yNpIEDPaAAN_hAtS9zWYFKRJA9nlBhE7Xv1BORFSWQQ"
         }
       ).then((res)=>{
-        navigate('/admin/home')
+       
         localStorage.setItem("access-token", res.data.admin.access_token);
+        localStorage.setItem("user-type" , "admin")
+        navigate('/admin/home')
         toast.success('Login successful!'); // Display success toast
         console.log(res)
       }).catch((err)=>{
