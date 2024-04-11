@@ -1,6 +1,6 @@
 import { FaGooglePlay, FaApple } from 'react-icons/fa';
 import { Grid, Button, Typography, Box } from '@mui/material';
-import downloadSectionImage from "../../../images/mobile_download_bg.png";
+import downloadSectionImage from "../../../images/application_bg.png";
 
 const DownloadSection = () => {
     return (
@@ -53,7 +53,6 @@ const DownloadSection = () => {
                         gap: '1rem',
                     }}
                 >
-                    {/* Button for Play Store */}
                     <Button
                         variant="contained"
                         startIcon={<FaGooglePlay size="24px" />}

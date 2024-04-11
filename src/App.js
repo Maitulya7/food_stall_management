@@ -21,7 +21,6 @@ function App() {
         <Route path="/admin/login" element={<AdminLogin/>} />
         <Route path="/admin/register" element={<AdminRegister/>} />
         <Route path='/admin/home' element={<AdminHome/>}/>
-
         {/* Vendor route */}
         <Route path='/vendor/register' element={<VendorRegister/>}/>
         <Route path='/vendor/login' element={<VendorLogin/>}/>

@@ -7,7 +7,7 @@ const HeroSection = () => {
     container
     spacing={4}
     sx={{
-      paddingX: { xs: 2, sm: 4, md: 8, lg: 24 }, // Adjust padding for different screen sizes
+      paddingX: { xs: 2, sm: 4, md: 8, lg: 22 }, // Adjust padding for different screen sizes
       paddingY: { xs: 4, sm: 8 },
     }}
   >
@@ -16,7 +16,7 @@ const HeroSection = () => {
       xs={12}
       md={8}
       sx={{
-        marginTop: { xs: '20px' , md:"40px" , lg:"60px" }, 
+        marginTop: { xs: '20px' , md:"40px" , lg:"80px" }, 
       }}
     >
       <Grid container direction="column" spacing={2} >
@@ -27,7 +27,7 @@ const HeroSection = () => {
               marginBottom: 2,
               color: "#047857",
               fontWeight: "bold",
-              fontSize: { xs: '24px', sm: '32px', md: '44px' },
+              fontSize: { xs: '24px', sm: '32px', md: '60px' , lg:"80px" },
               textAlign: {xs:"center" , md:"start"}, 
             }}
           >
@@ -36,6 +36,7 @@ const HeroSection = () => {
               style={{
                 color: "black",
                 marginLeft: "3px",
+                fontSize: { xs: '24px', sm: '32px', md: '60px' , lg:"60px" },
               }}
             >
               Crave
@@ -49,6 +50,7 @@ const HeroSection = () => {
               marginBottom: 2,
               width: { xs: "100%", sm: "80%" }, // Full width on small screens
               textAlign: {xs:"center" , md:"start" }, // Center the text on small screens
+              fontSize: { xs: '10px', sm: '10px', md: '15px' , lg:"20px" },
             }}
           >
             Some Text Goes Here. Lorem ipsum dolor sit amet, consectetur
