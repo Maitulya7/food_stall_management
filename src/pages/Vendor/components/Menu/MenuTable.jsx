@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, selectedGridRowsCountSelector, selectedIdsLookupSelector } from '@mui/x-data-grid';
 import { Button, FormControl, Typography, Box, MenuItem, InputLabel, Select, IconButton, Grid, ListItemText } from '@mui/material';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
@@ -210,7 +210,9 @@ const MenuTable = () => {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", gap: "15px", marginBottom: "15px" }}>
-        <Button variant="contained" sx={{ marginY: "10px", width: "15%" }} color="primary" onClick={() => setOpen(true)}>Add Item</Button>
+        <Button variant="contained" sx={{ marginY: "10px", width: "15%" }} color="primary" onClick={() => {
+          setEditItemData(null)
+          setOpen(true)}}>Add Item</Button>
         <FormControl sx={{ width: "25%" }} margin="dense">
           <InputLabel>Select Category</InputLabel>
           <Select
@@ -281,6 +283,7 @@ const MenuTable = () => {
         setOpen={setOpen}
         fetchMenuItems={fetchMenuItems}
         editItemData={editItemData}
+        setEditItemData={setEditItemData}
       />
        <DeleteConfirmationModal
         open={deleteConfirmationOpen}

@@ -1,7 +1,18 @@
+import { useEffect } from "react";
 import VendorSidebar from "../components/VendorSidebar"
 import VendorTopbar from "../components/VendorTopbar"
+import { useNavigate } from "react-router-dom";
 
 const VendorProfile = () => {
+
+  const token = localStorage.getItem("access-token");
+  const navigate = useNavigate()
+
+  useEffect(()=>{
+    if(token == null)
+      navigate("/vendor/login")
+    
+  },[])
 
 
   return (

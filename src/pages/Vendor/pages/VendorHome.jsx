@@ -1,12 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import VendorSidebar from '../components/VendorSidebar'
 import { Grid, Typography } from '@mui/material';
 import VendorTopbar from '../components/VendorTopbar'
 import DashboardGrid from '../components/VendorGrid/DashboardGrid';
 import MenuTable from '../components/Menu/MenuTable';
+import { useNavigate } from 'react-router-dom';
+import VendorAnalysis from './VendorAnalysis';
 
 function VendorHome() {
   const [selectedTab, setSelectedTab] = useState('Oders');
+  const token = localStorage.getItem("access-token");
+  const navigate = useNavigate()
+
+  useEffect(()=>{
+    if(token == null)
+      navigate("/vendor/login")
+    
+  },[])
   
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
@@ -40,6 +50,7 @@ function VendorHome() {
             )}
             {selectedTab === 'Analysis' && (
               <Grid item xs={12}>
+                <VendorAnalysis/>
               </Grid>
             )}
           </Grid>

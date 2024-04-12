@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminSidebar from './components/AdminSidebar';
 import AdminTopbar from './components/AdminTopbar';
 import DashboardGrid from './components/Dashboard/DashboardGrid';
@@ -7,13 +7,23 @@ import PendingRequestTable from './components/Request/PendingRequest/PendingRequ
 import ApproveRequestTable from './components/Request/ApproveRequest/ApproveRequestTable';
 import RejectRequestTable from './components/Request/RejectRequest/RejectRequestTable';
 import CategoryTable from './components/Category/CategoryTable'; 
+import { useNavigate } from 'react-router-dom';
 
 const AdminHome = () => {
   const [selectedTab, setSelectedTab] = useState('pending');
+  const token = localStorage.getItem("access-token");
+  console.log(token);
+  const navigate = useNavigate()
   
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
   };
+
+  useEffect(()=>{
+    if(token == null){
+      navigate("/admin/login")
+    }
+  },[])
 
 
   return (

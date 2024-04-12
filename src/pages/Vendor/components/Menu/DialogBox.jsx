@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import DEFAULT_URL from "../../../../config";
 
-const DialogBox = ({ open, setOpen, fetchMenuItems, editItemData }) => {
+const DialogBox = ({ open, setOpen, fetchMenuItems, editItemData ,setEditItemData}) => {
   const [singleCategory, setSingleCategory] = useState('')
   const [categories, setCategories] = useState([])
   const storedCategoriesString = localStorage.getItem("categories");
@@ -90,13 +90,24 @@ const DialogBox = ({ open, setOpen, fetchMenuItems, editItemData }) => {
   useEffect(() => {
     if (editItemData) {
       setNewItem({
-        name: editItemData.name,
+        name: editItemData.name || '',
         item_type: editItemData.item_type,
         sub_type: editItemData.sub_type,
         taste: editItemData.taste,
         tags: editItemData.tags,
         price: editItemData.price
       });
+    }
+    else{
+      setNewItem({
+        name: '',
+        item_type: '',
+        sub_type: [],
+        taste: [],
+        tags: [],
+        price: ''
+      });
+
     }
   }, [editItemData]);
 
@@ -255,7 +266,9 @@ const DialogBox = ({ open, setOpen, fetchMenuItems, editItemData }) => {
         </DialogContent>
 
         <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingX: '24px', paddingY: '18px' }}>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={() => {
+            setEditItemData('')
+            setOpen(false)}}>Cancel</Button>
           <Button onClick={handleAddOrUpdateItem} variant='contained' color="primary">{editItemData ? 'Save' : 'Add'}</Button>
         </DialogActions>
       </Dialog>

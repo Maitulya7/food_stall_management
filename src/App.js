@@ -11,6 +11,7 @@ import VendorLogin from './pages/Vendor/Auth/VendorLogin';
 import VendorHome from './pages/Vendor/pages/VendorHome';
 import VendorProfile from './pages/Vendor/pages/VendorProfile';
 import CustomerLandingPage from './pages/Customer/CustomerLandingPage';
+import VendorAnalysis from './pages/Vendor/pages/VendorAnalysis';
 
 
 function App() {
@@ -20,14 +21,17 @@ function App() {
         {/* Admin routes */}
         <Route path="/admin/login" element={<AdminLogin/>} />
         <Route path="/admin/register" element={<AdminRegister/>} />
+        
         <Route path='/admin/home' element={<AdminHome/>}/>
         {/* Vendor route */}
         <Route path='/vendor/register' element={<VendorRegister/>}/>
         <Route path='/vendor/login' element={<VendorLogin/>}/>
         <Route path='/vendor/home' element={<VendorHome/>}/>
         <Route path='/vendor/profile' element={<VendorProfile/>}/>
+        <Route path='/vendor/analysis' element={<VendorAnalysis/>}/>
         {/* Customer route */}
         <Route path="/" element={<CustomerLandingPage/>}/>
+
     </Routes>
     <ToastContainer />
     </>
