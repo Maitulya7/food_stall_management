@@ -5,10 +5,11 @@ import VendorTopbar from '../components/VendorTopbar'
 import DashboardGrid from '../components/VendorGrid/DashboardGrid';
 import MenuTable from '../components/Menu/MenuTable';
 import { useNavigate } from 'react-router-dom';
-import VendorAnalysis from './VendorAnalysis';
+import VendorAnalysis from '../components/VendorAnalysis';
+import VendorOrder from '../components/VendorOrder';
 
 function VendorHome() {
-  const [selectedTab, setSelectedTab] = useState('Oders');
+  const [selectedTab, setSelectedTab] = useState('Order');
   const token = localStorage.getItem("access-token");
   const navigate = useNavigate()
 
@@ -32,9 +33,10 @@ function VendorHome() {
             <Grid item xs={12}>
               <DashboardGrid onTabChange={handleTabChange} />
             </Grid>
-            {selectedTab === 'Oder' && (
+            {selectedTab === 'Order' && (
               <Grid item xs={12}>
-                <Typography variant='h6'>Oder Table</Typography>
+                <Typography variant='h6'>Order Table</Typography>
+                <VendorOrder/>
               </Grid>
             )}
             {selectedTab === 'Menu' && (

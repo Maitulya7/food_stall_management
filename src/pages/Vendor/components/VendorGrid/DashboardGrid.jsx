@@ -7,7 +7,7 @@ import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 
 const DashboardGrid = ({ onTabChange }) => {
-  const [selectedTab, setSelectedTab] = useState('Oder'); 
+  const [selectedTab, setSelectedTab] = useState('Order'); 
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
@@ -16,8 +16,8 @@ const DashboardGrid = ({ onTabChange }) => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Oder')} style={{ cursor: 'pointer' }}>
-        <DashboardBox label="Order" color="#4caf50" selected={selectedTab === 'Oder'} icon={<ShoppingCart fontSize='large' />} />
+      <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Order')} style={{ cursor: 'pointer' }}>
+        <DashboardBox label="Order" color="#4caf50" selected={selectedTab === 'Order'} icon={<ShoppingCart fontSize='large' />} />
       </Grid>
       <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Menu')} style={{ cursor: 'pointer' }}>
         <DashboardBox label="Menu" color="#ff9800" selected={selectedTab === 'Menu'} icon={<RestaurantMenuIcon  fontSize='large'/>} />

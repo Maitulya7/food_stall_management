@@ -11,7 +11,8 @@ import VendorLogin from './pages/Vendor/Auth/VendorLogin';
 import VendorHome from './pages/Vendor/pages/VendorHome';
 import VendorProfile from './pages/Vendor/pages/VendorProfile';
 import CustomerLandingPage from './pages/Customer/CustomerLandingPage';
-import VendorAnalysis from './pages/Vendor/pages/VendorAnalysis';
+import VendorAnalysis from './pages/Vendor/components/VendorAnalysis';
+import AdminProfile from './pages/Admin/AdminProfile';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/admin/register" element={<AdminRegister/>} />
         
         <Route path='/admin/home' element={<AdminHome/>}/>
+        <Route path='/admin/profile' element={<AdminProfile/>}/>
         {/* Vendor route */}
         <Route path='/vendor/register' element={<VendorRegister/>}/>
         <Route path='/vendor/login' element={<VendorLogin/>}/>

@@ -6,7 +6,7 @@ import { Dashboard, Category, Markunread, CheckCircle, Schedule, Cancel } from '
 import { IconButton } from '@mui/material'; // Import IconButton
 import { Logout } from '@mui/icons-material'; // Import Logout icon
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for navigation
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate hook for navigation
 
 const SidebarToggle = styled.div`
   position: absolute;
@@ -79,13 +79,8 @@ const AdminSidebar = () => {
       {!collapsed && (
         <SidebarContent>
           <Menu iconShape="square">
-            <CustomMenuItem style={{margin:"10px"}} icon={<Dashboard />}>Dashboard</CustomMenuItem>
-            <CustomMenuItem style={{margin:"10px"}} icon={<Category />}>Category</CustomMenuItem>
-            <SubMenu  style={{margin:"10px"}} title="Request" icon={<Markunread />}>
-              <CustomMenuItem  icon={<CheckCircle />}>Accepted</CustomMenuItem>
-              <CustomMenuItem  icon={<Schedule />}>Pending</CustomMenuItem>
-              <CustomMenuItem   icon={<Cancel />}>Rejected</CustomMenuItem>
-            </SubMenu>
+            <CustomMenuItem  style={{margin:"10px"}} icon={<Dashboard />}><Link to="/admin/home">Dashboard</Link></CustomMenuItem>
+            <CustomMenuItem style={{margin:"10px"}} icon={<Category />}><Link to="/admin/profile">Profile</Link></CustomMenuItem>
           </Menu>
         </SidebarContent>
       )}

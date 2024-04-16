@@ -87,6 +87,10 @@ const VendorSidebar = () => {
     localStorage.removeItem('stall_name');
     localStorage.removeItem('stall_logo');
     localStorage.removeItem('user-type')
+    localStorage.removeItem('email')
+    localStorage.removeItem('phone_number')
+    localStorage.removeItem('firstName')
+    localStorage.removeItem('lastName')
     navigate('/vendor/login');
   };
 
