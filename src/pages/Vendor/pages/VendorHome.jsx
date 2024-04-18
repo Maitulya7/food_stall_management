@@ -45,7 +45,7 @@ function VendorHome() {
                 <MenuTable/>
               </Grid>
             )}
-            {selectedTab === 'Bills' && (
+            {selectedTab === 'Order History' && (
               <Grid item xs={12}>
                 <Typography variant='h6'>Bills  Table</Typography>
               </Grid>

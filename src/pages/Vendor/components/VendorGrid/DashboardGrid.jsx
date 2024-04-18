@@ -22,8 +22,8 @@ const DashboardGrid = ({ onTabChange }) => {
       <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Menu')} style={{ cursor: 'pointer' }}>
         <DashboardBox label="Menu" color="#ff9800" selected={selectedTab === 'Menu'} icon={<RestaurantMenuIcon  fontSize='large'/>} />
       </Grid>
-      <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Bills')} style={{ cursor: 'pointer' }}>
-        <DashboardBox label="Bills" color="#EB9196" selected={selectedTab === 'Bills'} icon={<MonetizationOnIcon fontSize='large' />} />
+      <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Order History')} style={{ cursor: 'pointer' }}>
+        <DashboardBox label="Order History" color="#EB9196" selected={selectedTab === 'Order History'} icon={<MonetizationOnIcon fontSize='large' />} />
       </Grid>
       <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Analysis')} style={{ cursor: 'pointer' }}>
         <DashboardBox label="Analysis" color="#1976d2" selected={selectedTab === 'Analysis'} icon={<EqualizerIcon  fontSize='large'/>} />
