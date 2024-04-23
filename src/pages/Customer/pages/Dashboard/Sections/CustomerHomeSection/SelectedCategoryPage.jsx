@@ -8,6 +8,7 @@ const MAX_DISPLAY_CATEGORIES = 5;
 const SelectedCategoryPage = ({ selectedCategory, handleGoBack }) => {
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState(null);
+  const categoryId = selectedCategory.id
 
   const toggleShowAllCategories = () => {
     setShowAllCategories(!showAllCategories);
@@ -23,7 +24,7 @@ const SelectedCategoryPage = ({ selectedCategory, handleGoBack }) => {
 
   if (selectedVendor) {
     return (
-      <FoodItemPage vendorId={selectedVendor} handleGoBack={handleBackToVendors} />
+      <FoodItemPage categoryId={categoryId} vendorId={selectedVendor} handleGoBack={handleBackToVendors} />
     );
   }
 
@@ -73,29 +74,7 @@ const SelectedCategoryPage = ({ selectedCategory, handleGoBack }) => {
                 <Typography variant="h6" component="div" gutterBottom>
                   {vendor.stall_name}
                 </Typography>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-                  <Typography variant="subtitle1">Type of Categories:</Typography>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', marginLeft: 5 }}>
-                    {vendor.type_of_categories.slice(0, showAllCategories ? undefined : MAX_DISPLAY_CATEGORIES).map((category) => (
-                      <Chip
-                        key={category}
-                        label={category}
-                        size="small"
-                        color="primary"
-                        style={{ marginRight: 5, marginBottom: 5 }}
-                      />
-                    ))}
-                    {vendor.type_of_categories.length > MAX_DISPLAY_CATEGORIES && (
-                      <Button
-                        size="small"
-                        onClick={toggleShowAllCategories}
-                        style={{ textTransform: 'none', marginLeft: 5 }}
-                      >
-                        {showAllCategories ? 'Show Less' : `+ ${vendor.type_of_categories.length - MAX_DISPLAY_CATEGORIES} More`}
-                      </Button>
-                    )}
-                  </div>
-                </div>
+           
                 <Button
                   variant="contained"
                   onClick={() => handleVendorClick(vendor.id)}

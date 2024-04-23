@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box ,Container, Typography } from '@mui/material';
-import Footer from './Components/Footer';
-import CustomerHome from './Sections/CustomerHome';
-import CustomerStall from './Sections/CustomerStall';
+import Footer from '../Components/Footer';
+import CustomerHome from './Sections/CustomerHomeSection/CustomerHome';
+import CustomerStall from './Sections/CustomerStallSection/CustomerStall';
 import CustomerCart from './Sections/CustomerCart';
 import CustomerProfile from './Sections/CustomerProfile';
 
@@ -20,7 +20,7 @@ const CustomerDashboard = () => {
           <Typography variant="h6" sx={{ mt: 2 }}>   <span style={{marginLeft:"20px"}}>Explore Categories</span> {<CustomerHome/>}</Typography>
         )}
         {tabIndex === 1 && (
-          <Typography variant="h4" sx={{ mt: 2 }}>{<CustomerStall/>}</Typography>
+          <Typography variant="h6" sx={{ mt: 2 }}>  <span>Explore All Stalls</span>{<CustomerStall/>}</Typography>
         )}
         {tabIndex === 2 && (
           <Typography variant="h4" sx={{ mt: 2 }}>{<CustomerCart/>}</Typography>

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Grid, Card, CardContent, Typography, IconButton, CircularProgress, Box, Button } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon  } from '@mui/icons-material';
-import DEFAULT_URL from '../../../../../config';
-import defaultImage from '../../../../../images/default.jpg';
+import DEFAULT_URL from '../../../../../../config';
+import defaultImage from '../../../../../../images/default.jpg';
 import SelectedCategoryPage from './SelectedCategoryPage';
 
 const CustomerHome = () => {
