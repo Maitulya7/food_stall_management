@@ -10,9 +10,11 @@ import VendorRegister from './pages/Vendor/Auth/VendorRegister';
 import VendorLogin from './pages/Vendor/Auth/VendorLogin';
 import VendorHome from './pages/Vendor/pages/VendorHome';
 import VendorProfile from './pages/Vendor/pages/VendorProfile';
-import CustomerLandingPage from './pages/Customer/CustomerLandingPage';
+import CustomerLandingPage from './pages/Customer/pages/CustomerLandingPage';
 import VendorAnalysis from './pages/Vendor/components/VendorAnalysis';
 import AdminProfile from './pages/Admin/AdminProfile';
+import CustomerLoginPage from './pages/Customer/pages/Auth/CustomerLoginPage';
+import CustomerDashboard from './pages/Customer/pages/Dashboard/CustomerDashboard';
 
 
 function App() {
@@ -33,6 +35,8 @@ function App() {
         <Route path='/vendor/analysis' element={<VendorAnalysis/>}/>
         {/* Customer route */}
         <Route path="/" element={<CustomerLandingPage/>}/>
+        <Route path="/customer/login" element={<CustomerLoginPage/>}/>
+        <Route path="/customer/home" element={<CustomerDashboard/>}/>
 
     </Routes>
     <ToastContainer />

@@ -5,6 +5,7 @@ import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon
 import AttachFileIcon from '@mui/icons-material/AttachFile'; // Import AttachFileIcon
 import axios from 'axios';
 import DEFAULT_URL from '../../../../config';
+import { toast } from 'react-toastify';
 
 const AddCategoryModal = ({ isOpen, handleClose, handleAddCategory }) => {
   const [categoryName, setCategoryName] = useState('');
@@ -22,18 +23,15 @@ const AddCategoryModal = ({ isOpen, handleClose, handleAddCategory }) => {
     const accessToken = localStorage.getItem('access-token');
     console.log('Submit button clicked');
 
-    // Make sure you have the access token before proceeding
     if (!accessToken) {
       console.error('Access token not found.');
       return;
     }
 
-    // Create FormData object to append the file
     const formData = new FormData();
     formData.append('category[name]', categoryName);
     formData.append('category[image]', selectedFile);
 
-    // Send POST request to upload the image
     axios.post(`${DEFAULT_URL}/api/v1/admin/categories`, formData, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -44,12 +42,12 @@ const AddCategoryModal = ({ isOpen, handleClose, handleAddCategory }) => {
       console.log('Category created successfully:', response.data.category);
       console.log('Message:', response.data.message);
       handleAddCategory(response.data.category);
+      toast.success("Successfully Added!")
       setCategoryName('');
       setSelectedFile(null);
       handleClose();
     })
     .catch(error => {
-      // Handle error
       console.error('Error creating category:', error);
     });
   };

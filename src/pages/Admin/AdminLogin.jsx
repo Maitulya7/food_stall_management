@@ -49,7 +49,6 @@ const AdminLogin = () => {
 
   return (
     <Grid container sx={{ height: '100vh', overflow: 'hidden' }}>
-      {/* Left Side */}
       <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'auto' }}>
         <Box sx={{ p: 4, borderRadius: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: 600, width: '100%' }}>
           <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', mb: 2 }}>Admin Login</Typography>
@@ -133,7 +132,6 @@ const AdminLogin = () => {
 
         </Box>
       </Grid>
-      {/* Right Side */}
       <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
         <Box
           sx={{

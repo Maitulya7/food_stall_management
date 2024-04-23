@@ -2,6 +2,7 @@ import { Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, FormCo
 import axios from "axios";
 import { useEffect, useState } from "react";
 import DEFAULT_URL from "../../../../config";
+import { toast } from "react-toastify";
 
 const DialogBox = ({ open, setOpen, fetchMenuItems, editItemData ,setEditItemData}) => {
   const [singleCategory, setSingleCategory] = useState('')
@@ -69,7 +70,7 @@ const DialogBox = ({ open, setOpen, fetchMenuItems, editItemData ,setEditItemDat
       }
     })
       .then(response => {
-        console.log(`${editItemData ? 'Item edited' : 'Item added'} successfully:`, response.data);
+        {editItemData ? toast.success("Item Edited Successfully") : toast.success("Item Added Successfully")}
         setNewItem({
           name: '',
           item_type: '',

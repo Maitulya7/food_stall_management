@@ -180,9 +180,8 @@ const VendorAnalysis = () => {
             break;
     }
 
-    // Function to download data as CSV
     const downloadCSV = (data, labels, filename) => {
-        const csvData = labels.map((label, idx) => [label, data[idx]]);  // Combine labels and data
+        const csvData = labels.map((label, idx) => [label, data[idx]]);
         const csvString = Papa.unparse(csvData);
         const blob = new Blob([csvString], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
@@ -194,10 +193,7 @@ const VendorAnalysis = () => {
         document.body.removeChild(link);
     };
 
-    // Function to trigger print dialog
-    const handlePrint = () => {
-        window.print();
-    };
+  
 
     return (
         <Box sx={{ padding: '20px' }}>
@@ -233,9 +229,7 @@ const VendorAnalysis = () => {
                             >
                                 Download Orders CSV
                             </Button>
-                            <Button variant="contained" onClick={handlePrint}>
-                                Print Analysis
-                            </Button>
+                         
                         </Box>
                     </Box>
                 </Grid>
@@ -270,9 +264,7 @@ const VendorAnalysis = () => {
                             >
                                 Download Revenue CSV
                             </Button>
-                            <Button variant="contained" onClick={handlePrint}>
-                                Print Analysis
-                            </Button>
+                        
                         </Box>
                     </Box>
                 </Grid>
@@ -307,9 +299,7 @@ const VendorAnalysis = () => {
                             >
                                 Download GST CSV
                             </Button>
-                            <Button variant="contained" onClick={handlePrint}>
-                                Print Analysis
-                            </Button>
+                        
                         </Box>
                     </Box>
                 </Grid>

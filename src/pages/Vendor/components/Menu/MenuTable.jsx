@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DataGrid, selectedGridRowsCountSelector, selectedIdsLookupSelector } from '@mui/x-data-grid';
+import { DataGrid} from '@mui/x-data-grid';
 import { Button, FormControl, Typography, Box, MenuItem, InputLabel, Select, IconButton, Grid, ListItemText } from '@mui/material';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
@@ -8,6 +8,7 @@ import DEFAULT_URL from '../../../../config';
 import DialogBox from './DialogBox';
 import CustomPopover from './CustomPopover';
 import DeleteConfirmationModal from '../../../components/DeleteConfirmationModal';
+import { toast } from 'react-toastify';
 
 const MenuTable = () => {
   const [menuData, setMenuData] = useState([]);
@@ -60,7 +61,7 @@ const MenuTable = () => {
       }
     })
       .then(response => {
-        console.log('Item deleted successfully:', response.data);
+        toast.success("Item Deleted Successfully")
         fetchMenuItems();
       })
       .catch(error => {

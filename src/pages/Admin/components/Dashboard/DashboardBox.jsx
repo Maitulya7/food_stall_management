@@ -10,8 +10,8 @@ const DashboardBox = ({ label, value, color, selected, icon }) => {
         padding: '25px',
         borderRadius: '8px',
         cursor: 'pointer',
-        transition: 'background-color 0.2s, color 0.2s', // Smoother transitions
-        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Subtle box shadow
+        transition: 'background-color 0.2s, color 0.2s', 
+        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
         '&:hover': {
           backgroundColor: selected ? color : '#c5e1a5',
           color: selected ? '#fff' : '#000',

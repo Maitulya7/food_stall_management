@@ -8,7 +8,7 @@ const AdminProfile = () => {
     <AdminSidebar style={{ height: '100vh' }} />
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
     <AdminTopbar pageTitle="Admin Profile" />
-      
+        
     </div>
   </div>
   )

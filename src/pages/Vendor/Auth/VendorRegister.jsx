@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText, Typography, Grid, Paper, Switch, FormControlLabel } from '@mui/material';
+import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText, Typography, Grid, Paper, Switch, FormControlLabel, Box } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import DEFAULT_URL from '../../../config';
+import Lottie from 'react-lottie';
+import animationData from '../../../images/admin-register-animation.json';
 
 const VendorRegister = () => {
   const [categories, setCategories] = useState([]);
@@ -31,6 +33,8 @@ const VendorRegister = () => {
       password: '',
       confirmPassword: '',
       stallName: '',
+      razorpay_key_id:'',
+      razorpay_secret_id:'',
       franchiseDetails: ''
     },
     validationSchema: Yup.object({
@@ -43,6 +47,8 @@ const VendorRegister = () => {
         .oneOf([Yup.ref('password'), null], 'Passwords must match')
         .required('Confirm Password is required'),
       stallName: Yup.string().required('Stall Name is required'),
+      razorpay_key_id : Yup.string().required('Razorpay key ID is required'),
+      razorpay_secret_id : Yup.string().required('Razorpay secret ID is required')
 
     }),
     onSubmit: async values => {
@@ -58,6 +64,8 @@ const VendorRegister = () => {
         formData.append('vendor[stall_name]', values.stallName);
         formData.append('vendor[franchise]', hasFranchise);
         formData.append('vendor[franchise_details]', values.franchiseDetails);
+        formData.append('vendor[razorpay_key_id]', values.razorpay_key_id)
+        formData.append('vendor[razorpay_secret_id]', values.razorpay_secret_id)
         formData.append('client_id', "yNpIEDPaAAN_hAtS9zWYFKRJA9nlBhE7Xv1BORFSWQQ")
         console.log(selectedCategories)
 
@@ -83,7 +91,7 @@ const VendorRegister = () => {
   const handleFranchiseToggle = () => {
     setHasFranchise(!hasFranchise);
     if (!hasFranchise) {
-      formik.setFieldValue('franchiseDetails', ''); // Reset franchise details field
+      formik.setFieldValue('franchiseDetails', ''); 
     }
   };
 
@@ -149,6 +157,18 @@ const VendorRegister = () => {
               <Grid item xs={6}>
                 <TextField
                   fullWidth
+                  id="stallName"
+                  name="stallName"
+                  label="Stall Name"
+                  value={formik.values.stallName}
+                  onChange={formik.handleChange}
+                  error={formik.touched.stallName && Boolean(formik.errors.stallName)}
+                  helperText={formik.touched.stallName && formik.errors.stallName}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
                   id="password"
                   name="password"
                   label="Password"
@@ -172,18 +192,7 @@ const VendorRegister = () => {
                   helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                 />
               </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  id="stallName"
-                  name="stallName"
-                  label="Stall Name"
-                  value={formik.values.stallName}
-                  onChange={formik.handleChange}
-                  error={formik.touched.stallName && Boolean(formik.errors.stallName)}
-                  helperText={formik.touched.stallName && formik.errors.stallName}
-                />
-              </Grid>
+            
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel id="categories-label">Categories</InputLabel>
@@ -211,6 +220,30 @@ const VendorRegister = () => {
                   </Select>
                 </FormControl>
 
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  id="razorpay_key_id"
+                  name="razorpay_key_id"
+                  label="Razorypay Key ID"
+                  value={formik.values.razorpay_key_id}
+                  onChange={formik.handleChange}
+                  error={formik.touched.razorpay_key_id && Boolean(formik.errors.razorpay_key_id)}
+                  helperText={formik.touched.razorpay_key_id && formik.errors.razorpay_key_id}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  id="razorpay_secret_id"
+                  name="razorpay_secret_id"
+                  label="Razorpay Secret ID"
+                  value={formik.values.razorpay_secret_id}
+                  onChange={formik.handleChange}
+                  error={formik.touched.razorpay_secret_id && Boolean(formik.errors.razorpay_secret_id)}
+                  helperText={formik.touched.razorpay_secret_id && formik.errors.confirmPassword}
+                />
               </Grid>
               <Grid item xs={12}>
                 <input
@@ -260,6 +293,30 @@ const VendorRegister = () => {
             <Button color="primary" variant="contained" fullWidth type="submit" style={{ marginTop: '20px' }}>Register</Button>
           </form>
         </Paper>
+      </Grid>
+      <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <Box
+          sx={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Lottie
+            options={{
+              loop: true,
+              autoplay: true,
+              animationData: animationData,
+              rendererSettings: {
+                preserveAspectRatio: 'xMidYMid slice'
+              }
+            }}
+            height={700}
+            width={700}
+          />
+        </Box>
       </Grid>
     </Grid>
   );

@@ -7,7 +7,7 @@ const HeroSection = () => {
     container
     spacing={4}
     sx={{
-      paddingX: { xs: 2, sm: 4, md: 8, lg: 22 }, // Adjust padding for different screen sizes
+      paddingX: { xs: 2, sm: 4, md: 8, lg: 22 },
       paddingY: { xs: 4, sm: 8 },
     }}
   >
