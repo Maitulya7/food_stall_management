@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@mui/material";
-import heroImage from "../../../images/mobile_image.png";
+import heroImage from "../../../../images/mobile_image.png";
 
 const HeroSection = () => {
   return (

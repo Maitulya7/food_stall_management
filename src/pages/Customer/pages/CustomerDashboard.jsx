@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box ,Container, Typography } from '@mui/material';
-import Footer from '../Components/Footer';
-import CustomerHome from './Sections/CustomerHomeSection/CustomerHome';
-import CustomerStall from './Sections/CustomerStallSection/CustomerStall';
-import CustomerCart from './Sections/CustomerCart';
-import CustomerProfile from './Sections/CustomerProfile';
+import Footer from './Components/Footer';
+import CustomerHome from './CustomerHomeSection/CustomerHome';
+import CustomerStall from './CustomerStallSection/CustomerStall';
+import CustomerCart from './CustomerCartSection/CustomerCart';
+import CustomerProfile from './CustomerProfileSection/CustomerProfile';
 
 const CustomerDashboard = () => {
   const [tabIndex, setTabIndex] = React.useState(0);
@@ -17,7 +17,7 @@ const CustomerDashboard = () => {
     <Box sx={{ flexGrow: 1, paddingBottom: '56px', minHeight: '100vh', bgcolor: '#f9f9f9' }}>
       <Container sx={{ py: 4 }}>
         {tabIndex === 0 && (
-          <Typography variant="h6" sx={{ mt: 2 }}>   <span style={{marginLeft:"20px"}}>Explore Categories</span> {<CustomerHome/>}</Typography>
+          <Typography variant="h6" sx={{ mt: 2 }}>   <span style={{marginLeft:"20px"}}>Explore Categories</span> {<CustomerHome/>} </Typography>
         )}
         {tabIndex === 1 && (
           <Typography variant="h6" sx={{ mt: 2 }}>  <span>Explore All Stalls</span>{<CustomerStall/>}</Typography>

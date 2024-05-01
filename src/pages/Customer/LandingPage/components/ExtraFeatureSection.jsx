@@ -9,7 +9,7 @@ import {
   Notifications
 } from "@mui/icons-material";
 import { Box, Grid, Typography } from "@mui/material";
-import appFeatureBg from "../../../images/app_feature.png";
+import appFeatureBg from "../../../../images/app_feature.png";
 
 const ExtraFeatureSection = () => {
   return (

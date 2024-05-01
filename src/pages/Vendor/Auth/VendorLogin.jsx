@@ -43,7 +43,7 @@ const VendorLogin = () => {
       }).then((res) => {
         navigate("/vendor/home");
         toast.success('Login successful!');
-        const categories = res.data.categories;
+        const categories = res.data.vendor.categories;
         const categoriesString = JSON.stringify(categories);
         localStorage.setItem("categories", categoriesString);
         localStorage.setItem("user-type" , "vendor")

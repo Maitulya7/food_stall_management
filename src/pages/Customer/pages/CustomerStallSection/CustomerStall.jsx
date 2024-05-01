@@ -14,14 +14,14 @@ import {
   CardContent,
   CardMedia,
 } from '@mui/material';
-import DEFAULT_URL from '../../../../../../config';
+import DEFAULT_URL from '../../../../config';
+import { Link } from 'react-router-dom';
 
 const CustomerStall = () => {
   const [vendors, setVendors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedVendor, setSelectedVendor] = useState(null);
-
 
   const openPopover = (event, vendor) => {
     setAnchorEl(event.currentTarget);
@@ -71,6 +71,7 @@ const CustomerStall = () => {
 
     <Grid container marginTop={1} spacing={2}>
       {vendors.map(vendor => (
+        
         <Grid item key={vendor.id} xs={12} sm={6} md={4} lg={3}>
           <Card sx={{
             height: '100%', display: 'flex',borderRadius:"8px", cursor:"pointer" ,flexDirection: 'column', transition: 'transform 0.2s ease-in-out',

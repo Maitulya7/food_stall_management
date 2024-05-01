@@ -1,13 +1,33 @@
-import React from 'react';
-import { Card, CardContent, Typography, Box, Chip, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import { Card, CardContent, Typography, Box, Chip, IconButton, Modal, Button } from '@mui/material';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
-import DEFAULT_IMAGE from '../../../../../../images/pizza.jpg';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import DEFAULT_IMAGE from '../../../../images/pizza.jpg';
 
 const FoodItemCard = ({ foodItem, handleAddToCart }) => {
+  const [quantity, setQuantity] = useState(1);
+
   const getDotColor = (type) => {
     return type === 'Veg' ? 'green' : 'red';
   };
+
+  const handleAdd = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const handleRemove = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const handleAddToCartClick = () => {
+    handleAddToCart(foodItem.id, quantity, foodItem.price);
+  };
+
+
 
   return (
     <Card
@@ -17,11 +37,7 @@ const FoodItemCard = ({ foodItem, handleAddToCart }) => {
         flexDirection: 'column',
         borderRadius: '12px',
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-        transition: 'transform 0.2s ease-in-out',
-        '&:hover': {
-          transform: 'scale(1.03)',
-          boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
-        },
+      
       }}
     >
       <Box position="relative" maxHeight={200} overflow="hidden" borderRadius="12px 12px 0 0">
@@ -39,14 +55,13 @@ const FoodItemCard = ({ foodItem, handleAddToCart }) => {
             },
           }}
         />
-
       </Box>
       <CardContent sx={{ flexGrow: 1 }}>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Typography variant="h6" component="div" gutterBottom>
             {foodItem.name}
           </Typography>
-          <Box sx={{paddingBottom:"12px"}}>
+          <Box sx={{ paddingBottom: '12px' }}>
             <FiberManualRecordIcon
               style={{
                 color: getDotColor(foodItem.item_type),
@@ -64,15 +79,22 @@ const FoodItemCard = ({ foodItem, handleAddToCart }) => {
           Taste: {foodItem.taste.join(', ')}
         </Typography>
         <Box mt="auto" display="flex" alignItems="center" justifyContent="space-between">
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton aria-label="remove" onClick={handleRemove}>
+              <RemoveCircleOutlineIcon />
+            </IconButton>
+            <Typography variant="body1" sx={{ fontWeight: 'bold', mx: 1 }}>
+              {quantity}
+            </Typography>
+            <IconButton aria-label="add" onClick={handleAdd}>
+              <AddCircleOutlineIcon />
+            </IconButton>
+          </Box>
           <Typography variant="body1" sx={{ fontWeight: 'bold' }} color="black">
-            ${foodItem.price}
+            ${foodItem.price * quantity}
           </Typography>
-          <IconButton
-            color="primary"
-            aria-label="add to cart"
-            onClick={() => handleAddToCart(foodItem.id)}
-          >
-            <AddShoppingCartIcon />
+          <IconButton color="primary" aria-label="add to cart" onClick={handleAddToCartClick}>
+            <ShoppingCartIcon />
           </IconButton>
         </Box>
       </CardContent>

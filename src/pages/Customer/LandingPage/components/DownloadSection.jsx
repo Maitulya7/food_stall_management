@@ -1,6 +1,6 @@
 import { FaGooglePlay, FaApple } from 'react-icons/fa';
 import { Grid, Button, Typography, Box } from '@mui/material';
-import downloadSectionImage from "../../../images/application_bg.png";
+import downloadSectionImage from "../../../../images/application_bg.png";
 
 const DownloadSection = () => {
     return (
