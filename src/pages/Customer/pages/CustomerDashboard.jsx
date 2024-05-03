@@ -5,6 +5,7 @@ import CustomerHome from './CustomerHomeSection/CustomerHome';
 import CustomerStall from './CustomerStallSection/CustomerStall';
 import CustomerCart from './CustomerCartSection/CustomerCart';
 import CustomerProfile from './CustomerProfileSection/CustomerProfile';
+import { Link } from 'react-router-dom';
 
 const CustomerDashboard = () => {
   const [tabIndex, setTabIndex] = React.useState(0);
@@ -21,9 +22,12 @@ const CustomerDashboard = () => {
         )}
         {tabIndex === 1 && (
           <Typography variant="h6" sx={{ mt: 2 }}>  <span>Explore All Stalls</span>{<CustomerStall/>}</Typography>
+
         )}
         {tabIndex === 2 && (
+          <Link to="/cusotmer/cart">  
           <Typography variant="h4" sx={{ mt: 2 }}>{<CustomerCart/>}</Typography>
+          </Link>
         )}
         {tabIndex === 3 && (
           <Typography variant="h4" sx={{ mt: 2 }}>{<CustomerProfile/>}</Typography>

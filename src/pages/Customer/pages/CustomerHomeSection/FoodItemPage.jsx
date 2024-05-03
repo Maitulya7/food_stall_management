@@ -33,6 +33,8 @@ const FoodItemPage = () => {
       }
     };
 
+
+
     fetchFoodItems();
   }, [vendorId, categoryId]);
 
@@ -44,41 +46,114 @@ const FoodItemPage = () => {
     setShowAllItems(!showAllItems);
   };
 
+  
   const handleAddToCart = (foodItemId, quantity, price) => {
-    const token = localStorage.getItem("access-token");
+    const accessToken = localStorage.getItem("access-token");
+    const cartId = localStorage.getItem("cart-id");
+  
+    if (cartId == null) {
+      createCartAndAddItem(foodItemId, quantity, price, accessToken);
+  
+    } else {
+      axios.get(`${DEFAULT_URL}/api/v1/customer/cart`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }
+      }).then((res) => {
+        const cartId = res.data.cart.id;
+        if (foodItemId) {
+          updateCartItem(foodItemId, quantity, price, accessToken, cartId);
+        } else {
+          addCartItem(foodItemId, quantity, price, accessToken, cartId);
+        }
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+  };
+  
+  const createCartAndAddItem = (foodItemId, quantity, price, accessToken) => {
     axios.post(`${DEFAULT_URL}/api/v1/customer/carts`, {}, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${accessToken}`,
+      }
+    }).then((res) => {
+      const cartId = res.data.cart.id;
+      localStorage.setItem("cart-id", cartId);
+      addCartItem(foodItemId, quantity, price, accessToken, cartId);
+      navigate('/customer/cart')
+    }).catch((error) => {
+      console.log(error);
+    });
+  };
+  
+  const addCartItem = (foodItemId, quantity, price, accessToken) => {
+    axios.post(`${DEFAULT_URL}/api/v1/customer/carts/cart_items`, {
+      cart_item: {
+        "food_item_id": foodItemId,
+        "quantity": quantity,
+        "price": price * quantity
+      }
+    }, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
       }
     }).then((res) => {
       console.log(res);
-      axios.post(`${DEFAULT_URL}/api/v1/customer/carts/cart_items`, {
-        "cart_item": {
-          "food_item_id": foodItemId,
-          "quantity": quantity,
-          "price": price
-        }
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        }
-      }).then((res) => {
-        axios.post(`${DEFAULT_URL}/api/v1/customer/orders`, {
-          "order": {
-            "vendor_id": Number(vendorId),
-            "amount_to_be_paid": price,
-            "total_items": 1,
+      navigate('/customer/cart')
+    }).catch((error) => {
+      console.log(error);
+    });
+  };
+  
+  const updateCartItem = (foodItemId, quantity, price, accessToken, cartId) => {
+    axios.get(`${DEFAULT_URL}/api/v1/customer/cart`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      }
+    }).then((res) => {
+      const cartItems = res.data.cart.cart_items;
+      let  existingCartItem = cartItems.find(item => item.food_item_id === foodItemId);
+      
+      if (existingCartItem) {
+        axios.put(`${DEFAULT_URL}/api/v1/customer/carts/cart_items/${existingCartItem.id}`, {
+          cart_item: {
+            "food_item_id": foodItemId,
+            "quantity": quantity,
+            "price": price * quantity
           }
         }, {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${accessToken}`,
           }
-        }).then(() => {
-          navigate('/customer/cart');
+        }).then((res) => {
+          console.log(res);
+          const totalPrice = res.data.cart.cart_items.reduce((total, item) => {
+            return total + item.price;
+          }, 0);
+          axios.put(`${DEFAULT_URL}/api/v1/customer/carts`, {
+            cart:{
+              "final_price": totalPrice
+          }
+          } , {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+            }
+          })
+          navigate('/customer/cart')
+        }).catch((error) => {
+          console.log(error);
         });
-      });
+      } else {
+        addCartItem(foodItemId, quantity, price, accessToken, cartId);
+      }
+    }).catch((error) => {
+      console.log(error);
     });
   };
+  
+  
+  
 
   if (loading) {
     return <CircularProgress />;

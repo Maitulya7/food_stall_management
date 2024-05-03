@@ -7,7 +7,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import DEFAULT_IMAGE from '../../../../images/pizza.jpg';
 
 const FoodItemCard = ({ foodItem, handleAddToCart }) => {
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
 
   const getDotColor = (type) => {
     return type === 'Veg' ? 'green' : 'red';

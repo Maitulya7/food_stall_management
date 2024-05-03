@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Select,
@@ -21,8 +21,21 @@ import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PersonIcon from '@mui/icons-material/Person';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import axios from 'axios';
+import DEFAULT_URL from '../../../config';
 
 const VendorOrder = () => {
+
+  useEffect(()=> { 
+
+    const accessToken = localStorage.getItem("access-token")
+      axios.get(`${DEFAULT_URL}/api/v1/vendor/orders`, {
+         headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'multipart/form-data'
+      }
+      })
+  },[])
   const initialOrders = [
     {
       id: 1,
