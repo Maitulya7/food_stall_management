@@ -37,7 +37,11 @@ const DialogBox = ({ open, setOpen, fetchMenuItems, editItemData ,setEditItemDat
 
 
   const fetchCategories = () => {
-    axios.get('http://localhost:3000/api/v1/admin/categories')
+    axios.get('http://localhost:3000/api/v1/admin/categories',{
+      headers: {
+        "ngrok-skip-browser-warning": true,
+      },
+    })
       .then(response => {
         setCategories(response.data.categories);
       })

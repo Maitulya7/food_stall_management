@@ -6,6 +6,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import DEFAULT_URL from '../../../../config';
 import axios from 'axios';
+import Footer from "../Components/Footer"
 import useRazorpay from "react-razorpay";
 
 const CustomerCart = () => {
@@ -14,7 +15,6 @@ const CustomerCart = () => {
   const [vendorId , setVendorId] = useState('')
   const [Razorpay] = useRazorpay();
 
-  console.log(vendorId)
 
 
 
@@ -26,6 +26,7 @@ const CustomerCart = () => {
         const response = await axios.get(`${DEFAULT_URL}/api/v1/customer/cart`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
+            "ngrok-skip-browser-warning": true,
           }
         });
         const cartData = response.data.cart;
@@ -49,8 +50,6 @@ const CustomerCart = () => {
         console.error('Error fetching cart items:', error);
       }
     };
-
-
 
     fetchCartItems();
   }, []);
@@ -201,8 +200,9 @@ const CustomerCart = () => {
 
 
   return (
+    <>
     <Grid container justifyContent="center" spacing={2} style={{ padding: '20px' }}>
-      <Grid item xs={12} md={8}>
+      <Grid  item xs={12} md={8}>
         <Typography variant="h4" style={{ marginBottom: '20px', textAlign: 'center', color: '#333' }}>
           <ShoppingCartIcon style={{ marginRight: '10px', color: '#555' }} />
           Your Cart
@@ -264,7 +264,7 @@ const CustomerCart = () => {
                   fullWidth
                   style={{ marginTop: '20px', backgroundColor: '#4CAF50', color: '#fff' }}
                   onClick={() => handlePayment({vendor:item.food_item?.vendor_category?.vendor})}
-                >
+                  >
                   Proceed to Payment
                 </Button>
               </Grid>
@@ -273,7 +273,10 @@ const CustomerCart = () => {
         )}
 
       </Grid>
+
     </Grid>
+    <Footer />
+            </>
   );
 };
 

@@ -5,6 +5,7 @@ import DEFAULT_URL from '../../../../config';
 import defaultImage from '../../../../images/default.jpg';
 import SelectedCategoryPage from './SelectedCategoryPage';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../Components/Footer';
 
 const CustomerHome = () => {
   const [categories, setCategories] = useState([]);
@@ -20,6 +21,7 @@ const CustomerHome = () => {
         const response = await axios.get(`${DEFAULT_URL}/api/v1/customer/categories`, {
           headers: {
             Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": true,
           },
         });
         console.log(response);
@@ -45,18 +47,26 @@ const CustomerHome = () => {
   };
 
   return (
-    <div style={{ padding: 20 }}>
+    <>
+    <div>
       {selectedCategory ? (
         <SelectedCategoryPage selectedCategory={selectedCategory} handleGoBack={handleGoBack} />
       ) : (
-        <Grid container spacing={3}>
+        <Grid sx={{paddingX:{xs:4, sm:12, md:32 , lg:44} , paddingY:{xs:4 , sm:6, md:8 , lg:10} ,marginBottom:6}} container spacing={3}>
           {loading ? (
-            <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{height:"100vh" , margin:"auto" , display:'flex' , justifyContent:"center"}}>
               <CircularProgress />
-            </Grid>
+            </Box>
           ) : (
             categories.map(({ id, name, image, vendors }) => (
-              <Grid item xs={12} sm={6} md={4} key={id}>
+              <Grid 
+                item 
+                xs={12} 
+                sm={6} 
+                md={4} 
+                key={id}
+                
+              >
                 <Card
                   sx={{
                     height: '100%',
@@ -71,9 +81,9 @@ const CustomerHome = () => {
                     },
                   }}
                 >
-                  <div style={{ position: 'relative', maxHeight: 200, overflow: 'hidden' }}>
+                  <div style={{ position: 'relative', maxHeight: 200, overflow: 'auto' }}>
                     <img
-                      src={image || defaultImage}
+                      src={defaultImage}
                       alt={name}
                       style={{
                         width: '100%',
@@ -86,18 +96,17 @@ const CustomerHome = () => {
                       }}
                     />
                   </div>
-                  <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                    <Typography variant="h6" component="div" gutterBottom>
+                  <CardContent sx={{ display: 'flex' , alignItems:"center" , justifyContent:"space-between"}}>
+                    <Typography variant="h6" >
                       {name}
                     </Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Box>
                       <Typography
-                        variant="body2"
                         color="primary"
                         sx={{ fontWeight: 'bold', cursor: 'pointer' }}
                         onClick={() => handleViewMore({ id, name, vendors })}
                       >
-                        View More
+                        View
                       </Typography>
                     </Box>
                   </CardContent>
@@ -108,6 +117,8 @@ const CustomerHome = () => {
         </Grid>
       )}
     </div>
+        <Footer/>
+    </>
   );
 };
 

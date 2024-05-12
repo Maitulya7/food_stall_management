@@ -90,6 +90,7 @@ const ApproveRequestTable = ({ approvedRequests }) => {
     axios.get(`${DEFAULT_URL}/api/v1/admin/requests`, {
       headers: {
         Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": true,
       },
     })
       .then((res) => {

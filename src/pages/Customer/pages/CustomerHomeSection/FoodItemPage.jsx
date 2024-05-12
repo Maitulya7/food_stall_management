@@ -23,6 +23,7 @@ const FoodItemPage = () => {
         const response = await axios.get(`${DEFAULT_URL}/api/v1/customer/food_items?vendor_id=${vendorId}&category_id=${categoryId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": true,
           },
         });
         setFoodItems(response.data.food_items);
@@ -58,6 +59,7 @@ const FoodItemPage = () => {
       axios.get(`${DEFAULT_URL}/api/v1/customer/cart`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
+          "ngrok-skip-browser-warning": true,
         }
       }).then((res) => {
         const cartId = res.data.cart.id;
@@ -110,6 +112,7 @@ const FoodItemPage = () => {
     axios.get(`${DEFAULT_URL}/api/v1/customer/cart`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
+        "ngrok-skip-browser-warning": true,
       }
     }).then((res) => {
       const cartItems = res.data.cart.cart_items;
@@ -160,13 +163,8 @@ const FoodItemPage = () => {
   }
 
   return (
-    <Box
-      sx={{
-        py: [8, 8], 
-        px: [4, 48], 
-      }}
-    >
-      <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+    <Box>
+      <Box sx={{marginX:{xs:4 , sm:12 , md:32 , lg:44}}} mt={6} display="flex"  justifyContent="space-between" mb={2}>
         <Typography variant="h5">
           Food Items
         </Typography>
@@ -174,7 +172,7 @@ const FoodItemPage = () => {
           Back
         </Button>
       </Box>
-      <Grid container spacing={3}>
+      <Grid  sx={{paddingX:{xs:4, sm:12, md:32 , lg:44}  ,marginBottom:6}}  container spacing={3}>
         {foodItems.slice(0, showAllItems ? undefined : MAX_DISPLAY_FOOD_ITEMS).map((foodItem) => (
           <Grid item xs={12} sm={6} md={4} key={foodItem.id}>
             <FoodItemCard

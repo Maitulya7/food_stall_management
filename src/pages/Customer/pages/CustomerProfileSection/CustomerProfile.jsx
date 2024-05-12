@@ -1,9 +1,10 @@
 import React from 'react'
+import Footer from '../Components/Footer'
 
 const CustomerProfile = () => {
   return (
     <div>
-        this is profile page
+        <Footer/>
     </div>
   )
 }

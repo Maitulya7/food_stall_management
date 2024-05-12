@@ -32,7 +32,9 @@ const VendorOrder = () => {
       axios.get(`${DEFAULT_URL}/api/v1/vendor/orders`, {
          headers: {
         'Authorization': `Bearer ${accessToken}`,
+        "ngrok-skip-browser-warning": true,
         'Content-Type': 'multipart/form-data'
+        
       }
       })
   },[])

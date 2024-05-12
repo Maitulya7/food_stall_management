@@ -1,12 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText, Typography, Grid, Paper, Switch, FormControlLabel, Box } from '@mui/material';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import DEFAULT_URL from '../../../config';
-import Lottie from 'react-lottie';
-import animationData from '../../../images/admin-register-animation.json';
+import React, { useState, useEffect } from "react";
+import {
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Checkbox,
+  ListItemText,
+  Typography,
+  Grid,
+  Paper,
+  Switch,
+  FormControlLabel,
+  Box,
+} from "@mui/material";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import DEFAULT_URL from "../../../config";
+import Lottie from "react-lottie";
+import animationData from "../../../images/admin-register-animation.json";
 
 const VendorRegister = () => {
   const [categories, setCategories] = useState([]);
@@ -15,71 +30,94 @@ const VendorRegister = () => {
   const [logoFile, setLogoFile] = useState(null);
 
   useEffect(() => {
-    axios.get(`${DEFAULT_URL}/api/v1/admin/categories`)
-      .then(response => {
+    axios
+      .get(`${DEFAULT_URL}/api/v1/admin/categories`, {
+        "ngrok-skip-browser-warning": true,
+      })
+      .then((response) => {
         setCategories(response.data.categories);
       })
-      .catch(error => {
-        console.error('Error fetching categories:', error);
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
       });
   }, []);
 
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNumber: '',
-      password: '',
-      confirmPassword: '',
-      stallName: '',
-      razorpay_key_id:'',
-      razorpay_secret_id:'',
-      franchiseDetails: ''
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+      confirmPassword: "",
+      stallName: "",
+      razorpay_key_id: "",
+      razorpay_secret_id: "",
+      franchiseDetails: "",
     },
     validationSchema: Yup.object({
-      firstName: Yup.string().required('First Name is required'),
-      lastName: Yup.string().required('Last Name is required'),
-      email: Yup.string().email('Invalid email address').required('Email is required'),
-      phoneNumber: Yup.string().required('Phone Number is required'),
-      password: Yup.string().required('Password is required'),
+      firstName: Yup.string().required("First Name is required"),
+      lastName: Yup.string().required("Last Name is required"),
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
+      phoneNumber: Yup.string().required("Phone Number is required"),
+      password: Yup.string().required("Password is required"),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Passwords must match')
-        .required('Confirm Password is required'),
-      stallName: Yup.string().required('Stall Name is required'),
-      razorpay_key_id : Yup.string().required('Razorpay key ID is required'),
-      razorpay_secret_id : Yup.string().required('Razorpay secret ID is required')
-
+        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .required("Confirm Password is required"),
+      stallName: Yup.string().required("Stall Name is required"),
+      razorpay_key_id: Yup.string().required("Razorpay key ID is required"),
+      razorpay_secret_id: Yup.string().required(
+        "Razorpay secret ID is required"
+      ),
     }),
-    onSubmit: async values => {
+    onSubmit: async (values) => {
       try {
         const formData = new FormData();
-        formData.append('vendor[stall_logo]', logoFile);
-        formData.append('vendor[first_name]', values.firstName);
-        formData.append('vendor[last_name]', values.lastName);
-        formData.append('vendor[email]', values.email);
-        formData.append('vendor[phone_number]', values.phoneNumber);
-        formData.append('vendor[password]', values.password);
-        formData.append('vendor[type_of_categories]', JSON.stringify(selectedCategories));
-        formData.append('vendor[stall_name]', values.stallName);
-        formData.append('vendor[franchise]', hasFranchise);
-        formData.append('vendor[franchise_details]', values.franchiseDetails);
-        formData.append('vendor[razorpay_key_id]', values.razorpay_key_id)
-        formData.append('vendor[razorpay_secret_id]', values.razorpay_secret_id)
-        formData.append('client_id', "yNpIEDPaAAN_hAtS9zWYFKRJA9nlBhE7Xv1BORFSWQQ")
-        console.log(selectedCategories)
+        formData.append("vendor[stall_logo]", logoFile);
+        formData.append("vendor[first_name]", values.firstName);
+        formData.append("vendor[last_name]", values.lastName);
+        formData.append("vendor[email]", values.email);
+        formData.append("vendor[phone_number]", values.phoneNumber);
+        formData.append("vendor[password]", values.password);
+        formData.append(
+          "vendor[type_of_categories]",
+          JSON.stringify(selectedCategories)
+        );
+        formData.append("vendor[stall_name]", values.stallName);
+        formData.append("vendor[franchise]", hasFranchise);
+        formData.append("vendor[franchise_details]", values.franchiseDetails);
+        formData.append("vendor[razorpay_key_id]", values.razorpay_key_id);
+        formData.append(
+          "vendor[razorpay_secret_id]",
+          values.razorpay_secret_id
+        );
+        formData.append(
+          "client_id",
+          "OT-Fkr2xgMFDGwjPO_cga2BiDwVZX5RDPwGtjTG1Vs8"
+        );
+        console.log(selectedCategories);
 
-        axios.post(`${DEFAULT_URL}/api/v1/vendor/sign_up`, formData, {}, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then((res) => {
-          console.log(res);
-        }).catch((err) => {
-          console.log(err);
-        });
+        axios
+          .post(
+            `${DEFAULT_URL}/api/v1/vendor/sign_up`,
+            formData,
+            {},
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       } catch (error) {
-        console.error('Registration failed:', error.message);
+        console.error("Registration failed:", error.message);
       }
     },
   });
@@ -91,7 +129,7 @@ const VendorRegister = () => {
   const handleFranchiseToggle = () => {
     setHasFranchise(!hasFranchise);
     if (!hasFranchise) {
-      formik.setFieldValue('franchiseDetails', ''); 
+      formik.setFieldValue("franchiseDetails", "");
     }
   };
 
@@ -100,10 +138,17 @@ const VendorRegister = () => {
   };
 
   return (
-    <Grid container justifyContent="center" alignItems="center" style={{ height: '100vh' }}>
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      style={{ height: "100vh" }}
+    >
       <Grid item xs={10} sm={8} md={6} lg={4}>
-        <Paper elevation={3} style={{ padding: '20px' }}>
-          <Typography variant="h5" gutterBottom align="center">Vendor Registration</Typography>
+        <Paper elevation={3} style={{ padding: "20px" }}>
+          <Typography variant="h5" gutterBottom align="center">
+            Vendor Registration
+          </Typography>
           <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={6}>
@@ -114,8 +159,12 @@ const VendorRegister = () => {
                   label="First Name"
                   value={formik.values.firstName}
                   onChange={formik.handleChange}
-                  error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-                  helperText={formik.touched.firstName && formik.errors.firstName}
+                  error={
+                    formik.touched.firstName && Boolean(formik.errors.firstName)
+                  }
+                  helperText={
+                    formik.touched.firstName && formik.errors.firstName
+                  }
                 />
               </Grid>
               <Grid item xs={6}>
@@ -126,7 +175,9 @@ const VendorRegister = () => {
                   label="Last Name"
                   value={formik.values.lastName}
                   onChange={formik.handleChange}
-                  error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                  error={
+                    formik.touched.lastName && Boolean(formik.errors.lastName)
+                  }
                   helperText={formik.touched.lastName && formik.errors.lastName}
                 />
               </Grid>
@@ -150,8 +201,13 @@ const VendorRegister = () => {
                   label="Phone Number"
                   value={formik.values.phoneNumber}
                   onChange={formik.handleChange}
-                  error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
-                  helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
+                  error={
+                    formik.touched.phoneNumber &&
+                    Boolean(formik.errors.phoneNumber)
+                  }
+                  helperText={
+                    formik.touched.phoneNumber && formik.errors.phoneNumber
+                  }
                 />
               </Grid>
               <Grid item xs={6}>
@@ -162,8 +218,12 @@ const VendorRegister = () => {
                   label="Stall Name"
                   value={formik.values.stallName}
                   onChange={formik.handleChange}
-                  error={formik.touched.stallName && Boolean(formik.errors.stallName)}
-                  helperText={formik.touched.stallName && formik.errors.stallName}
+                  error={
+                    formik.touched.stallName && Boolean(formik.errors.stallName)
+                  }
+                  helperText={
+                    formik.touched.stallName && formik.errors.stallName
+                  }
                 />
               </Grid>
               <Grid item xs={6}>
@@ -175,7 +235,9 @@ const VendorRegister = () => {
                   type="password"
                   value={formik.values.password}
                   onChange={formik.handleChange}
-                  error={formik.touched.password && Boolean(formik.errors.password)}
+                  error={
+                    formik.touched.password && Boolean(formik.errors.password)
+                  }
                   helperText={formik.touched.password && formik.errors.password}
                 />
               </Grid>
@@ -188,11 +250,17 @@ const VendorRegister = () => {
                   type="password"
                   value={formik.values.confirmPassword}
                   onChange={formik.handleChange}
-                  error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-                  helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                  error={
+                    formik.touched.confirmPassword &&
+                    Boolean(formik.errors.confirmPassword)
+                  }
+                  helperText={
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                  }
                 />
               </Grid>
-            
+
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel id="categories-label">Categories</InputLabel>
@@ -203,13 +271,22 @@ const VendorRegister = () => {
                     multiple
                     value={selectedCategories}
                     onChange={handleCategoryChange}
-                    renderValue={(selected) => selected.join(',')}
+                    renderValue={(selected) => selected.join(",")}
                   >
                     {categories?.map((category) => (
                       <MenuItem key={category.id} value={category.name}>
                         <Grid container alignItems="center">
                           <Grid item>
-                            <img src={category.image_url} alt={category.name} style={{ width: 30, height: 30, borderRadius: '50%', marginRight: 10 }} />
+                            <img
+                              src={category.image_url}
+                              alt={category.name}
+                              style={{
+                                width: 30,
+                                height: 30,
+                                borderRadius: "50%",
+                                marginRight: 10,
+                              }}
+                            />
                           </Grid>
                           <Grid item>
                             <ListItemText primary={category.name} />
@@ -219,7 +296,6 @@ const VendorRegister = () => {
                     ))}
                   </Select>
                 </FormControl>
-
               </Grid>
               <Grid item xs={6}>
                 <TextField
@@ -229,8 +305,14 @@ const VendorRegister = () => {
                   label="Razorypay Key ID"
                   value={formik.values.razorpay_key_id}
                   onChange={formik.handleChange}
-                  error={formik.touched.razorpay_key_id && Boolean(formik.errors.razorpay_key_id)}
-                  helperText={formik.touched.razorpay_key_id && formik.errors.razorpay_key_id}
+                  error={
+                    formik.touched.razorpay_key_id &&
+                    Boolean(formik.errors.razorpay_key_id)
+                  }
+                  helperText={
+                    formik.touched.razorpay_key_id &&
+                    formik.errors.razorpay_key_id
+                  }
                 />
               </Grid>
               <Grid item xs={6}>
@@ -241,8 +323,14 @@ const VendorRegister = () => {
                   label="Razorpay Secret ID"
                   value={formik.values.razorpay_secret_id}
                   onChange={formik.handleChange}
-                  error={formik.touched.razorpay_secret_id && Boolean(formik.errors.razorpay_secret_id)}
-                  helperText={formik.touched.razorpay_secret_id && formik.errors.confirmPassword}
+                  error={
+                    formik.touched.razorpay_secret_id &&
+                    Boolean(formik.errors.razorpay_secret_id)
+                  }
+                  helperText={
+                    formik.touched.razorpay_secret_id &&
+                    formik.errors.confirmPassword
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -250,12 +338,12 @@ const VendorRegister = () => {
                   accept="image/*"
                   id="logo-upload"
                   type="file"
-                  style={{ display: 'none' }}
+                  style={{ display: "none" }}
                   onChange={handleLogoChange}
                 />
                 <label htmlFor="logo-upload">
                   <Button
-                    type='button'
+                    type="button"
                     fullWidth
                     variant="contained"
                     color="secondary"
@@ -270,7 +358,12 @@ const VendorRegister = () => {
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <FormControlLabel
-                    control={<Switch checked={hasFranchise} onChange={handleFranchiseToggle} />}
+                    control={
+                      <Switch
+                        checked={hasFranchise}
+                        onChange={handleFranchiseToggle}
+                      />
+                    }
                     label="Do you have a franchise?"
                   />
                 </FormControl>
@@ -284,24 +377,48 @@ const VendorRegister = () => {
                     label="Franchise Details"
                     value={formik.values.franchiseDetails}
                     onChange={formik.handleChange}
-                    error={formik.touched.franchiseDetails && Boolean(formik.errors.franchiseDetails)}
-                    helperText={formik.touched.franchiseDetails && formik.errors.franchiseDetails}
+                    error={
+                      formik.touched.franchiseDetails &&
+                      Boolean(formik.errors.franchiseDetails)
+                    }
+                    helperText={
+                      formik.touched.franchiseDetails &&
+                      formik.errors.franchiseDetails
+                    }
                   />
                 </Grid>
               )}
             </Grid>
-            <Button color="primary" variant="contained" fullWidth type="submit" style={{ marginTop: '20px' }}>Register</Button>
+            <Button
+              color="primary"
+              variant="contained"
+              fullWidth
+              type="submit"
+              style={{ marginTop: "20px" }}
+            >
+              Register
+            </Button>
           </form>
         </Paper>
       </Grid>
-      <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      <Grid
+        item
+        xs={12}
+        md={6}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
         <Box
           sx={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Lottie
@@ -310,8 +427,8 @@ const VendorRegister = () => {
               autoplay: true,
               animationData: animationData,
               rendererSettings: {
-                preserveAspectRatio: 'xMidYMid slice'
-              }
+                preserveAspectRatio: "xMidYMid slice",
+              },
             }}
             height={700}
             width={700}

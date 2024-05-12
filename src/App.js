@@ -17,11 +17,12 @@ import CustomerLandingPage from './pages/Customer/LandingPage/CustomerLandingPag
 import CustomerLoginPage from './pages/Customer/pages/Auth/CustomerLoginPage';
 import CustomerDashboard from './pages/Customer/pages/CustomerDashboard';
 import SelectedCategoryPage from './pages/Customer/pages/CustomerHomeSection/SelectedCategoryPage';
-import Footer from './pages/Customer/LandingPage/components/Footer';
 import FoodItemPage from './pages/Customer/pages/CustomerHomeSection/FoodItemPage';
 import CustomerStall from './pages/Customer/pages/CustomerStallSection/CustomerStall';
 import CustomerStallFoodItems from './pages/Customer/pages/CustomerStallSection/CustomerStallFoodItems';
 import CustomerCart from './pages/Customer/pages/CustomerCartSection/CustomerCart';
+import CustomerProfile from './pages/Customer/pages/CustomerProfileSection/CustomerProfile';
+import CustomerHome from './pages/Customer/pages/CustomerHomeSection/CustomerHome';
 
 function App() {
   return (
@@ -45,12 +46,15 @@ function App() {
 
           <Route path="/" element={<CustomerLandingPage />} />
           <Route path="/customer/login" element={<CustomerLoginPage />} />
-          <Route path="/customer/home" element={<CustomerDashboard />} />
+          <Route path="/customer/home" element={<CustomerHome />} />
           <Route path="/customer/:id" element={<SelectedCategoryPage />} />
           <Route path="/customer/:vendorId/foodItem/:categoryId" element={<FoodItemPage />} />
           <Route path="/customer/stall" element={<CustomerStall />} />
+          <Route path="/customer/stall/vendor/:vendorId" element={<CustomerStallFoodItems />} />
           <Route path="/customer/stall/:vendorId" element={<CustomerStallFoodItems />} />
           <Route path="/customer/cart" element={<CustomerCart />} />
+          <Route path="/customer/profile" element={<CustomerProfile />} />
+
 
         </Routes>
         <ToastContainer />

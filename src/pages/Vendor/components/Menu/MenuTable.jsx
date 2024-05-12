@@ -37,6 +37,7 @@ const MenuTable = () => {
     axios.get(url, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
+        "ngrok-skip-browser-warning": true,
       }
     })
       .then(response => {

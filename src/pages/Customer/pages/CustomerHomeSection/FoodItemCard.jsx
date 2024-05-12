@@ -36,8 +36,7 @@ const FoodItemCard = ({ foodItem, handleAddToCart }) => {
         display: 'flex',
         flexDirection: 'column',
         borderRadius: '12px',
-        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-      
+        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',      
       }}
     >
       <Box position="relative" maxHeight={200} overflow="hidden" borderRadius="12px 12px 0 0">
