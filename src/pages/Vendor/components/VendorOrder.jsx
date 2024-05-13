@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   Button,
-  Select,
-  MenuItem,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -16,13 +14,10 @@ import {
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import CloseIcon from '@mui/icons-material/Close';
-import FoodBankIcon from '@mui/icons-material/FoodBank';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PersonIcon from '@mui/icons-material/Person';
 import axios from 'axios';
 import DEFAULT_URL from '../../../config';
-import { act } from 'react';
 
 const VendorOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -41,12 +36,10 @@ const VendorOrder = () => {
           },
         });
   
-        // Sort orders by created_at date in descending order
         const sortedOrders = response.data.orders.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);
         });
   
-        // Format the created_at date before setting orders
         const formattedOrders = sortedOrders.map(order => ({
           ...order,
           created_at: new Date(order.created_at).toLocaleString('en-GB', {
