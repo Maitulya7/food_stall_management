@@ -24,7 +24,7 @@ import animationData from "../../../../images/admin-register-animation.json";
 import { toast } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css";
 
-const CustomerLoginPage = () => {
+const CustomerRegisterPage = () => {
   const navigate = useNavigate();
   const [emailExistsError, setEmailExistsError] = useState(false);
   const [error, setError] = useState("");
@@ -33,7 +33,7 @@ const CustomerLoginPage = () => {
   const handleSubmit = (values) => {
     try {
       axios
-        .post(`${DEFAULT_URL}/api/v1/customer/login`, {
+        .post(`${DEFAULT_URL}/api/v1/customer/sign_up`, {
           customer: {
             email: values.email,
             password: values.password,
@@ -41,10 +41,8 @@ const CustomerLoginPage = () => {
           client_id: "OT-Fkr2xgMFDGwjPO_cga2BiDwVZX5RDPwGtjTG1Vs8",
         })
         .then((res) => {
-          localStorage.setItem("access-token", res.data.customer.access_token);
-          localStorage.setItem("user-type", "customer");
-          navigate("/customer/home");
-          toast.success("Login successful!"); // Display success toast
+          navigate("/customer/login");
+          toast.success("Register successful!"); // Display success toast
           console.log(res);
         })
         .catch((err) => {
@@ -89,7 +87,7 @@ const CustomerLoginPage = () => {
             component="h2"
             sx={{ fontWeight: "bold", mb: 2 }}
           >
-            Customer Login
+            Customer Register
           </Typography>
           <Formik
             initialValues={{ email: "", password: "" }}
@@ -147,7 +145,7 @@ const CustomerLoginPage = () => {
                   fullWidth
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "login..." : "Login"}
+                  {isSubmitting ? "Register..." : "Register"}
                 </Button>
               </Form>
             )}
@@ -180,9 +178,9 @@ const CustomerLoginPage = () => {
                 fontSize: { xs: "10px", sm: "15px", md: "20px", lg: "20px" },
               }}
             >
-              Don't have an account?{" "}
-              <Link href="/customer/register" color="inherit">
-                Register
+              Already Register?{" "}
+              <Link href="/customer/login" color="inherit">
+                Login
               </Link>
             </Typography>
           </Box>
@@ -227,4 +225,4 @@ const CustomerLoginPage = () => {
   );
 };
 
-export default CustomerLoginPage;
+export default CustomerRegisterPage;

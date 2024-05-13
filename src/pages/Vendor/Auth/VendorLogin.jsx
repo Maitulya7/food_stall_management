@@ -53,7 +53,6 @@ const VendorLogin = () => {
           localStorage.setItem("categories", categoriesString);
           localStorage.setItem("user-type", "vendor");
           localStorage.setItem("access-token", res.data.access_token);
-          localStorage.setItem("stall_name", res.data.vendor.stall_name);
           localStorage.setItem("stall_logo", res.data.vendor.stall_logo_url);
           localStorage.setItem("email", res.data.vendor.email);
           localStorage.setItem("phone_number", res.data.vendor.phone_number);

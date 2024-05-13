@@ -23,6 +23,7 @@ import CustomerStallFoodItems from './pages/Customer/pages/CustomerStallSection/
 import CustomerCart from './pages/Customer/pages/CustomerCartSection/CustomerCart';
 import CustomerProfile from './pages/Customer/pages/CustomerProfileSection/CustomerProfile';
 import CustomerHome from './pages/Customer/pages/CustomerHomeSection/CustomerHome';
+import CustomerRegisterPage from './pages/Customer/pages/Auth/CustomerRegisterPage';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
 
           <Route path="/" element={<CustomerLandingPage />} />
           <Route path="/customer/login" element={<CustomerLoginPage />} />
+          <Route path="/customer/register" element={<CustomerRegisterPage />} />
           <Route path="/customer/home" element={<CustomerHome />} />
           <Route path="/customer/:id" element={<SelectedCategoryPage />} />
           <Route path="/customer/:vendorId/foodItem/:categoryId" element={<FoodItemPage />} />

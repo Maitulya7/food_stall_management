@@ -12,7 +12,7 @@ import {
   Grid,
   Box,
   Paper,
-  Divider
+  Divider,
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import CloseIcon from '@mui/icons-material/Close';
@@ -20,90 +20,54 @@ import FoodBankIcon from '@mui/icons-material/FoodBank';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PersonIcon from '@mui/icons-material/Person';
-import ArchiveIcon from '@mui/icons-material/Archive';
 import axios from 'axios';
 import DEFAULT_URL from '../../../config';
+import { act } from 'react';
 
 const VendorOrder = () => {
-
-  useEffect(()=> { 
-
-    const accessToken = localStorage.getItem("access-token")
-      axios.get(`${DEFAULT_URL}/api/v1/vendor/orders`, {
-         headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        "ngrok-skip-browser-warning": true,
-        'Content-Type': 'multipart/form-data'
-        
-      }
-      })
-  },[])
-  const initialOrders = [
-    {
-      id: 1,
-      orderId: '001',
-      customerName: 'Maitulya',
-      status: 'Not Ready',
-      paymentStatus: 'Paid',
-      foodName: 'Pizza',
-      quantity: 2,
-      tag: 'Veg',
-      taste: 'Spicy',
-      price: 10.0,
-    },
-    {
-      id: 2,
-      orderId: '002',
-      customerName: 'Luffy',
-      status: 'Not Ready',
-      paymentStatus: 'Unpaid',
-      foodName: 'Burger',
-      quantity: 1,
-      tag: 'Non-Veg',
-      taste: 'Mild',
-      price: 8.5,
-    },
-    {
-      id: 3,
-      orderId: '003',
-      customerName: 'Zoro',
-      status: 'Not Ready',
-      paymentStatus: 'Paid',
-      foodName: 'Pasta',
-      quantity: 3,
-      tag: 'Veg',
-      taste: 'Sweet',
-      price: 12.0,
-    },
-    {
-      id: 4,
-      orderId: '004',
-      customerName: 'Naruto',
-      status: 'Not Ready',
-      paymentStatus: 'Paid',
-      foodName: 'Pasta',
-      quantity: 3,
-      tag: 'Veg',
-      taste: 'Sweet',
-      price: 12.0,
-    },
-    {
-      id: 5,
-      orderId: '005',
-      customerName: 'Goku',
-      status: 'Not Ready',
-      paymentStatus: 'Paid',
-      foodName: 'Pasta',
-      quantity: 3,
-      tag: 'Veg',
-      taste: 'Sweet',
-      price: 12.0,
-    },
-  ];
-
-  const [orders, setOrders] = useState(initialOrders);
+  const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const accessToken = localStorage.getItem('access-token');
+        const response = await axios.get(`${DEFAULT_URL}/api/v1/vendor/orders`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'ngrok-skip-browser-warning': true,
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        // Sort orders by created_at date in descending order
+        const sortedOrders = response.data.orders.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+  
+        // Format the created_at date before setting orders
+        const formattedOrders = sortedOrders.map(order => ({
+          ...order,
+          created_at: new Date(order.created_at).toLocaleString('en-GB', {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+          }),
+        }));
+  
+        setOrders(formattedOrders);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    };
+  
+    fetchOrders();
+  }, []);
+  
 
   const openModal = (order) => {
     setSelectedOrder(order);
@@ -115,52 +79,61 @@ const VendorOrder = () => {
     setSelectedOrder(null);
   };
 
+  const handlePreparationTime = async () => {
+    // You can implement the logic here to post preparation time
+    // For example:
+    // const preparationTime = selectedOrder.preparing_time;
+    // await axios.post(`${DEFAULT_URL}/api/v1/vendor/orders/${selectedOrder.id}/preparation-time`, { preparationTime });
+  };
+
   const columns = [
-    { field: 'orderId', headerName: 'Order ID', width: 200 },
-    { field: 'customerName', headerName: 'Customer Name', width: 200 },
-    { field: 'paymentStatus', headerName: 'Payment Status', width: 200 },
-    {
-      field: 'status',
-      headerName: 'Status',
-      width: 200,
-      renderCell: (params) => (
-        <Select
-          value={params.value}
-          variant="outlined"
-          size="small"
-        >
-          <MenuItem value="Not Ready">Not Ready</MenuItem>
-          <MenuItem value="Ready">Ready</MenuItem>
-        </Select>
-      ),
-    },
+    { field: 'id', headerName: 'ID', width: 100 },
+    { field: 'customer_id', headerName: 'Customer ID', width: 150 },
+    { field: 'payment_status', headerName: 'Payment Status', width: 180 },
+    { field: 'amount_to_be_paid', headerName: 'Amount', width: 150 },
+    { field: 'total_items', headerName: 'Total Items', width: 150 },
+    { field: 'token_number', headerName: 'Token Number', width: 150 },
+    { field: 'created_at', headerName: 'Created At', width: 250 },
     {
       field: 'actions',
       headerName: 'Actions',
-      width: 200,
+      width: 250,
       renderCell: (params) => (
         <Button
           variant="contained"
           color="primary"
           onClick={() => openModal(params.row)}
+          disabled={params.row.payment_status !== 'paid'}
           startIcon={<LocalDiningIcon />}
         >
-          View Details
+          Set Preparation Time
         </Button>
       ),
     },
-
   ];
 
+  const rows = orders.map((item, index) => ({
+    id: index + 1,
+    customer_id: item.customer_id,
+    payment_status: item.payment_status,
+    amount_to_be_paid: item.amount_to_be_paid,
+    total_items: item.total_items,
+    token_number: item.token_number,
+    created_at: item.created_at,
+    actions: 'Set Preparation Time',
+  }));
+
   return (
-    <div style={{ height: 'auto', width: '100%' }}>
+    <div style={{ height: '500px', width: '100%' , overflow:"scroll"}}>
       <DataGrid
-        rows={orders}
+        rows={rows}
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        style={{ marginBottom: '20px' }}
-        autoHeight
+        initialState={{
+          ...orders.initialState,
+          pagination: { paginationModel: { pageSize: 5 } },
+        }}
+        pageSizeOptions={[5, 10, 25]}
+
       />
 
       <Dialog open={isModalOpen} onClose={closeModal} fullWidth maxWidth="sm">
@@ -184,39 +157,12 @@ const VendorOrder = () => {
                   <Grid item xs={12}>
                     <Typography variant="h6" gutterBottom>
                       <PersonIcon fontSize="small" sx={{ marginRight: 1 }} />
-                      {selectedOrder.customerName}
+                      {selectedOrder.customer_id}
                     </Typography>
                     <Typography variant="body1" color="textSecondary" gutterBottom>
-                      <strong>Order ID:</strong> {selectedOrder.orderId}
+                      <strong>Order ID:</strong> {selectedOrder.id}
                     </Typography>
                     <Divider sx={{ marginY: 1 }} />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="body1" component="div" sx={{ display: 'flex', alignItems: 'center' }}>
-                      <FoodBankIcon fontSize="small" sx={{ marginRight: 1 }} />
-                      <strong>Food Name:</strong> {selectedOrder.foodName}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="body1" component="div" sx={{ display: 'flex', alignItems: 'center' }}>
-                      <strong>Quantity:</strong> {selectedOrder.quantity}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="body1" component="div" sx={{ display: 'flex', alignItems: 'center' }}>
-                      <strong>Tag:</strong> {selectedOrder.tag}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="body1" component="div" sx={{ display: 'flex', alignItems: 'center' }}>
-                      <strong>Taste:</strong> {selectedOrder.taste}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="body1" component="div" sx={{ display: 'flex', alignItems: 'center' }}>
-                      <MonetizationOnIcon fontSize="small" sx={{ marginRight: 1 }} />
-                      <strong>Price:</strong> ${selectedOrder.price.toFixed(2)}
-                    </Typography>
                   </Grid>
                 </Grid>
               </Paper>
@@ -227,9 +173,13 @@ const VendorOrder = () => {
           <Button onClick={closeModal} color="primary" variant="contained">
             Close
           </Button>
+          {selectedOrder && selectedOrder.status === 'paid' && (
+            <Button onClick={handlePreparationTime} color="primary" variant="contained">
+              Set Preparation Time
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
-
     </div>
   );
 };
