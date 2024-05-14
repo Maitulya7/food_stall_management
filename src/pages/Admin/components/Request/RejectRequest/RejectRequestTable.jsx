@@ -54,7 +54,10 @@ const RejectRequestTable = () => {
     })
       .then((res) => {
         const filteredRequests = res.data.requests.filter(request => request.status === 'rejected');
-        setRejectedRequests(filteredRequests);
+        const sortedFilteredRequests = filteredRequests.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setRejectedRequests(sortedFilteredRequests);
       })
       .catch((err) => {
         console.log(err);

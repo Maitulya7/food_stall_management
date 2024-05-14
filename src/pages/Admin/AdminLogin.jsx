@@ -157,25 +157,7 @@ const AdminLogin = () => {
               {error}
             </Typography>
           )}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-            }}
-          >
-            <Typography variant="body2" sx={{ mt: 4 }}>
-              <Link href="/forgot-password" color="inherit">
-                Forgot Password?
-              </Link>
-            </Typography>
-            <Typography variant="body2" sx={{ mt: 4 }}>
-              Don't have account?{" "}
-              <Link href="/admin/register" color="inherit">
-                Register
-              </Link>
-            </Typography>
-          </Box>
+ 
         </Box>
       </Grid>
       <Grid

@@ -19,6 +19,7 @@ import DEFAULT_URL from "../../../../config";
 import DeleteConfirmationModal from "../../../components/DeleteConfirmationModal";
 
 const CategoryTable = () => {
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [openImageModal, setOpenImageModal] = useState(false);
@@ -38,7 +39,10 @@ const CategoryTable = () => {
         },
       })
       .then((response) => {
-        setCategories(response.data.categories);
+        const sortedOrders = response.data.categories.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setCategories(sortedOrders);
       })
       .catch((error) => {
         console.error("Error fetching categories:", error);
@@ -113,7 +117,7 @@ const CategoryTable = () => {
   };
 
   const columns = [
-    { field: "srNo", headerName: "Sr No", width: 100 },
+    { field: "srNo", headerName: "Sr No", width: 150 },
     { field: "name", headerName: "Category Name", width: 200 },
     {
       field: "viewImage",
@@ -130,20 +134,6 @@ const CategoryTable = () => {
       ),
     },
     {
-      field: "edit",
-      headerName: "Edit",
-      width: 100,
-      renderCell: (params) => (
-        <IconButton
-          color="primary"
-          size="small"
-          onClick={() => handleEdit(params.row.id)}
-        >
-          <EditIcon />
-        </IconButton>
-      ),
-    },
-    {
       field: "delete",
       headerName: "Delete",
       width: 150,
@@ -156,7 +146,7 @@ const CategoryTable = () => {
   ];
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div>
       <Box
         sx={{
           display: "flex",
@@ -169,7 +159,7 @@ const CategoryTable = () => {
           variant="contained"
           color="primary"
           onClick={handleOpenModal}
-          style={{ marginBottom: "10px" }}
+          style={{ marginBottom: "12px" }}
         >
           Add Category
         </Button>
@@ -187,7 +177,14 @@ const CategoryTable = () => {
         }))}
         columns={columns}
         pageSize={5}
+        initialState={{
+          ...categories.initialState,
+          pagination: { paginationModel: { pageSize: 5 } },
+        }}
+        pageSizeOptions={[5, 10, 25]}
       />
+
+      
       <Dialog open={openImageModal} onClose={handleCloseImageModal}>
         <DialogTitle>View Image</DialogTitle>
         <DialogContent>

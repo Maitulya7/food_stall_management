@@ -146,16 +146,12 @@ const VendorLogin = () => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "end",
               width: "100%",
               mt: 2,
             }}
           >
-            <Typography variant="body2">
-              <Link href="/forgot-password" color="inherit">
-                Forgot Password?
-              </Link>
-            </Typography>
+        
             <Typography variant="body2">
               Don't have an account?{" "}
               <Link href="/vendor/register" color="inherit">

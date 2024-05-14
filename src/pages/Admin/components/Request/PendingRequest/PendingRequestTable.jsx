@@ -147,7 +147,10 @@ const PendingRequestTable = () => {
     })
       .then((res) => {
         const filteredRequests = res.data.requests.filter(request => request.status === 'pending');
-        setPendingRequest(filteredRequests);
+        const sortedFilteredRequests = filteredRequests.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setPendingRequest(sortedFilteredRequests);
       })
       .catch((err) => {
         console.log(err);

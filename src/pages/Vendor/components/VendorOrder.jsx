@@ -117,7 +117,7 @@ const VendorOrder = () => {
   }));
 
   return (
-    <div style={{ height: '500px', width: '100%' , overflow:"scroll"}}>
+    <div style={{ height: '400px', width: '100%' , overflow:"hidden"}}>
       <DataGrid
         rows={rows}
         columns={columns}

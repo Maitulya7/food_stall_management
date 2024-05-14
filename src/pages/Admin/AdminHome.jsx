@@ -27,7 +27,7 @@ const AdminHome = () => {
 
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', minHeight: '100vh' , overflow:"hidden" }}>
       <AdminSidebar style={{ height: '100vh' }} />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <AdminTopbar pageTitle="Dashboard" />
@@ -38,24 +38,25 @@ const AdminHome = () => {
             </Grid>
             {selectedTab === 'pending' && (
               <Grid item xs={12}>
-                <Typography variant='h6'>Pending Request Table</Typography>
+                <Typography variant='h6' sx={{marginBottom:2}}>Pending Request Table</Typography>
                 <PendingRequestTable /> 
               </Grid>
             )}
             {selectedTab === 'approved' && (
               <Grid item xs={12}>
-                <Typography variant='h6'>Approved Request Table</Typography>
+                <Typography variant='h6' sx={{marginBottom:2}}>Approved Request Table</Typography>
                 <ApproveRequestTable  />
               </Grid>
             )}
             {selectedTab === 'rejected' && (
               <Grid item xs={12}>
-                <Typography variant='h6'>Rejected Request Table</Typography>
+                <Typography variant='h6' sx={{marginBottom:2}}>Rejected Request Table</Typography>
                 <RejectRequestTable  />
               </Grid>
             )}
             {selectedTab === 'categories' && (
               <Grid item xs={12}>
+                
                 <CategoryTable />
               </Grid>
             )}
