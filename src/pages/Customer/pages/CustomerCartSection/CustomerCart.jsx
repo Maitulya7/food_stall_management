@@ -21,9 +21,10 @@ import useRazorpay from "react-razorpay";
 const CustomerCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [vendorId, setVendorId] = useState("");
+  const [vendorTotalPrices, setVendorTotalPrices] = useState({});
+  const [groupedCartItems, setGroupedCartItems] = useState({});
   const [Razorpay] = useRazorpay();
-  
+
   useEffect(() => {
     const accessToken = localStorage.getItem("access-token");
 
@@ -40,10 +41,7 @@ const CustomerCart = () => {
         );
         const cartData = response.data.cart;
         setCartItems(cartData.cart_items);
-        const vendor_information =
-          response.data.cart.cart_items[0].food_item.vendor_category.vendor;
-        setVendorId(vendor_information.id);
-        console.log();
+
         const total = calculateTotalPrice(cartData.cart_items);
         setTotalPrice(total);
 
@@ -69,8 +67,7 @@ const CustomerCart = () => {
   }, []);
 
   const calculateTotalPrice = (items) => {
-    const total = items.reduce((acc, item) => acc + item.price, 0);
-    return total;
+    return items.reduce((acc, item) => acc + item.price, 0);
   };
 
   const handleIncrement = async (existingCartItem) => {
@@ -143,16 +140,16 @@ const CustomerCart = () => {
     }
   };
 
-  const handlePayment = (vendor) => {
+  const handlePayment = (vendorID, totalAmount, totalItem) => {
     const accessToken = localStorage.getItem("access-token");
     axios
       .post(
         `${DEFAULT_URL}/api/v1/customer/orders`,
         {
           order: {
-            vendor_id: vendor.vendor.id,
-            amount_to_be_paid: totalPrice,
-            total_items: 5,
+            vendor_id: vendorID,
+            amount_to_be_paid: totalAmount,
+            total_items: totalItem,
           },
         },
         {
@@ -233,230 +230,146 @@ const CustomerCart = () => {
       });
   };
 
+  useEffect(() => {
+    cartItems.reduce((grouped, item) => {
+      const vendorId = item.food_item.vendor_category.vendor.id;
+      if (!grouped[vendorId]) {
+        grouped[vendorId] = [];
+      }
+      grouped[vendorId].push(item);
+      setGroupedCartItems(grouped);
+      return grouped;
+    }, {});
+  }, [cartItems]);
+
+  useEffect(() => {
+    const vendorPrices = {};
+    for (const vendorId in groupedCartItems) {
+      const items = groupedCartItems[vendorId];
+      const totalAmount = calculateTotalPrice(items);
+      vendorPrices[vendorId] = totalAmount;
+    }
+    setVendorTotalPrices(vendorPrices);
+  }, [groupedCartItems]);
+
   return (
     <>
       <Grid
         container
         justifyContent="center"
         spacing={2}
-        style={{ padding: "20px" , marginBottom:"60px"}}
+        sx={{
+          padding: "20px",
+          marginBottom: "60px",
+          backgroundColor: "#f5f5f5",
+        }}
       >
         <Grid item xs={12} md={8}>
           <Typography
             variant="h4"
-            style={{ marginBottom: "20px", textAlign: "center", color: "#333" }}
+            sx={{
+              marginBottom: "20px",
+              textAlign: "center",
+              color: "#333",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+            }}
           >
-            <ShoppingCartIcon style={{ marginRight: "10px", color: "#555" }} />
+            <ShoppingCartIcon sx={{ marginRight: "10px", color: "#555" }} />
             Your Cart
           </Typography>
-          {cartItems.length === 0 ? (
+          {Object.keys(groupedCartItems).length === 0 ? (
             <Typography
               variant="body1"
-              style={{ textAlign: "center", color: "#555" }}
+              sx={{
+                textAlign: "center",
+                color: "#555",
+                fontStyle: "italic",
+              }}
             >
               Your cart is empty
             </Typography>
           ) : (
-            <Grid container spacing={2}>
-              {cartItems.map((item, index) => (
-                <Grid item xs={12} lg={6} key={item.id}>
-                  <Card
-                    style={{
-                      marginBottom: "20px",
-                      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                      borderRadius: "8px",
-                      transition: "0.3s",
-                    }}
-                  >
-                    <CardContent
-                      style={{
-                        backgroundColor: "#f9f9f9",
-                        padding: "30px",
-                        borderRadius: "8px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          marginBottom: "15px",
-                        }}
-                      >
-                        <Typography>
-                          {item.food_item?.vendor_category?.vendor?.stall_name}
+            <>
+              {Object.entries(groupedCartItems).map(([vendorId, items]) => (
+                <Box key={vendorId} sx={{ marginBottom: "20px" }}>
+                  <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+                    {items[0].food_item.vendor_category.vendor.stall_name}
+                  </Typography>
+                  {items.map((item) => (
+                    <Card key={item.id} sx={{ marginBottom: "10px" }}>
+                      <CardContent>
+                        <Typography variant="body1">
+                          {item.food_item.name}
                         </Typography>
-
-                        <Typography
-                          variant="h4"
-                          style={{ color: "#777", fontWeight: "bold" }}
-                        >
-                          ${item.food_item.price}
+                        <Typography variant="body2" color="textSecondary">
+                          Price: ₹{item.food_item.price}
                         </Typography>
-                      </div>
-                      <div
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns: "auto auto",
-                          gridGap: "10px",
-                        }}
-                      >
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <Typography
-                            variant="h6"
-                            style={{ marginRight: "10px" }}
-                          >
-                            {item.food_item.name}
-                          </Typography>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              gap: "5px",
-                              alignItems: "center",
-                              marginTop: "15px",
-                            }}
-                          >
-                            <Typography
-                              variant="h6"
-                              style={{ color: "#555", marginRight: "5px" }}
-                            >
-                              Item Type:
-                            </Typography>
-                            <div
-                              style={{
-                                width: "10px",
-                                height: "10px",
-                                borderRadius: "50%",
-                                backgroundColor:
-                                  item.food_item.item_type === "veg"
-                                    ? "red"
-                                    : "green",
-                              }}
-                            ></div>
-                            <Typography
-                              variant="h6"
-                              style={{ marginLeft: "5px" }}
-                            >
-                              {item.food_item.item_type}
-                            </Typography>
-                          </Box>
-                        </div>
-                      </div>
-                      <Box
-                        sx={{ display: "flex", gap: "5px", marginTop: "15px" }}
-                      >
-                        <Typography variant="h6" style={{ color: "#555" }}>
-                          Taste:
+                        <Typography variant="body2" color="textSecondary">
+                          Total Price: ₹{item.price}
                         </Typography>
-                        <Typography variant="h6">
-                          {item.food_item.taste.join(", ")}
-                        </Typography>
-                      </Box>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          marginTop: "15px",
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          style={{ color: "#555", marginRight: "10px" }}
-                        >
-                          Total Price:
-                        </Typography>
-                        <Typography
-                          variant="body1"
-                          style={{ fontWeight: "bold" }}
-                        >
-                          ${item.price}
-                        </Typography>
-                      </div>
-                    </CardContent>
-
-                    <CardActions
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderTop: "1px solid #eee",
-                        padding: "16px",
-                        backgroundColor: "#f9f9f9",
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                        }}
-                      >
+                      </CardContent>
+                      <CardActions>
                         <IconButton
-                          sx={{ border: "1px solid gray" }}
                           size="large"
                           onClick={() => handleDecrement(item)}
                         >
                           <RemoveIcon />
                         </IconButton>
-                        <Typography
-                          variant="body1"
-                          style={{
-                            margin: "0 10px",
-                            color: "#555",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {item.quantity}
-                        </Typography>
+                        <Typography variant="body1">{item.quantity}</Typography>
                         <IconButton
-                          sx={{ border: "1px solid gray" }}
                           size="large"
                           onClick={() => handleIncrement(item)}
                         >
                           <AddIcon />
                         </IconButton>
-                      </Box>
-                      <IconButton
-                        size="large"
-                        onClick={() => handleRemove(item.id)}
-                      >
-                        <RemoveShoppingCartIcon style={{ color: "#ff4f4f" }} />
-                      </IconButton>
-                    </CardActions>
-                  </Card>
-                  <Typography
-                    variant="h6"
-                    style={{
-                      marginBottom: "10px",
-                      textAlign: "center",
-                      color: "#333",
-                    }}
-                  >
-                    Total Price: ${totalPrice}
+                        <IconButton
+                          size="large"
+                          onClick={() => handleRemove(item.id)}
+                        >
+                          <RemoveShoppingCartIcon sx={{ color: "#ff4f4f" }} />
+                        </IconButton>
+                      </CardActions>
+                    </Card>
+                  ))}
+                  <Typography variant="h6">
+                    Total Amount: ₹{vendorTotalPrices[vendorId]}
                   </Typography>
                   <Button
                     variant="contained"
                     color="primary"
                     fullWidth
-                    style={{
-                      marginTop: "20px",
+                    sx={{
                       backgroundColor: "#4CAF50",
                       color: "#fff",
+                      marginTop: "10px",
                     }}
                     onClick={() =>
-                      handlePayment({
-                        vendor: item.food_item?.vendor_category?.vendor,
-                      })
+                      handlePayment(
+                        vendorId,
+                        calculateTotalPrice(items),
+                        items.reduce((total, item) => total + item.quantity, 0)
+                      )
                     }
                   >
                     Proceed to Payment
                   </Button>
-                </Grid>
+                </Box>
               ))}
-            </Grid>
+            </>
           )}
+          <Typography
+            variant="h6"
+            sx={{
+              marginBottom: "10px",
+              textAlign: "center",
+              color: "#333",
+              marginTop: "20px",
+              fontWeight: "bold",
+            }}
+          >
+            Final Price: ₹{totalPrice}
+          </Typography>
         </Grid>
       </Grid>
       <Footer />
