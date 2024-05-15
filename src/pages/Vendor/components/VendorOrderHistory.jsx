@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   Typography,
   IconButton,
   Grid,
@@ -16,10 +15,10 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Select,
   MenuItem,
-  InputLabel,
+  Select,
   FormControl,
+  InputLabel,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { DataGrid } from "@mui/x-data-grid";
@@ -28,7 +27,7 @@ import LocalDiningIcon from "@mui/icons-material/LocalDining";
 import axios from "axios";
 import DEFAULT_URL from "../../../config";
 
-const VendorOrder = () => {
+const VendorOrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [isFoodItemDetailModalOpen, setFoodItemDetailModalOpen] =
     useState(false);
@@ -41,13 +40,13 @@ const VendorOrder = () => {
   const updateFilteredAndSortedOrders = (orders) => {
     let filteredOrders = [...orders];
 
-    if (selectedFilter === "pending") {
+    if (selectedFilter === "reject") {
       filteredOrders = filteredOrders.filter(
-        (item) => item.status === "pending"
+        (item) => item.status === "rejected"
       );
-    } else if (selectedFilter === "approved") {
+    } else if (selectedFilter === "ready_to_deliver") {
       filteredOrders = filteredOrders.filter(
-        (item) => item.status === "approved"
+        (item) => item.status === "ready_for_delivery"
       );
     }
 
@@ -277,7 +276,7 @@ const VendorOrder = () => {
 
   const rows = filteredAndSortedOrders
     .map((item, index) => {
-      if (item.status === "pending") {
+      if (item.status === "rejected") {
         return {
           id: index + 1,
           orderId: item.id,
@@ -290,9 +289,9 @@ const VendorOrder = () => {
           food_item_detail: item.food_items_details,
           preparing_order: "Cooking",
           ready_to_deliver: "Ready",
-          status: "pending",
+          status: "rejected",
         };
-      } else if (item.status === "approved") {
+      } else if (item.status === "ready_for_delivery") {
         return {
           id: index + 1,
           orderId: item.id,
@@ -305,34 +304,30 @@ const VendorOrder = () => {
           food_item_detail: item.food_items_details,
           preparing_order: "Cooking",
           ready_to_deliver: "Ready",
-          status: "approved",
+          status: "ready_for_delivery",
         };
       } else {
-        return null;
+        return null; // If status is rejected or any other, exclude from the list
       }
     })
-    .filter(Boolean);
+    .filter(Boolean); // Filter out null values
 
   return (
     <div style={{ height: "400px", width: "100%" }}>
-
-
-      <FormControl sx={{width:"25%" , marginY:"20px"}}>
+      <FormControl sx={{ width: "25%", marginY: "20px" }}>
         <InputLabel id="demo-simple-select-label">Filter Orders</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           label="Filter Oders"
-          onChange={(e) => setSelectedFilter(e.target.value)}
           value={selectedFilter}
+          onChange={(e) => setSelectedFilter(e.target.value)}
         >
           <MenuItem value="All">All</MenuItem>
-        <MenuItem value="pending">Pending</MenuItem>
-        <MenuItem value="approved">Approved</MenuItem>
+          <MenuItem value="reject">Rejected</MenuItem>
+          <MenuItem value="ready_to_deliver">Completed</MenuItem>
         </Select>
       </FormControl>
-
-
       <DataGrid
         key={gridKey}
         rows={rows}
@@ -341,14 +336,14 @@ const VendorOrder = () => {
           params.row.status ? `status-${params.row.status}` : ""
         }
         sx={{
-          "& .status-pending": {
-            backgroundColor: "#FFD180", // very light orange color for pending status
+          "& .status-rejected": {
+            backgroundColor: "#FFBEBE",
           },
-          "& .status-approved": {
+          "& .status-ready_for_delivery": {
             backgroundColor: "#c5e1a5",
           },
-          "& .status-rejected": {
-            display: "none", // hide rows with rejected status
+          "& .status-pending": {
+            display: "none",
           },
         }}
         initialState={{
@@ -418,4 +413,4 @@ const VendorOrder = () => {
   );
 };
 
-export default VendorOrder;
+export default VendorOrderHistory;

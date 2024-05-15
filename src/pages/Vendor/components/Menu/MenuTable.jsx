@@ -215,6 +215,7 @@ const MenuTable = () => {
         <Button variant="contained" sx={{ marginY: "10px", width: "15%" }} color="primary" onClick={() => {
           setEditItemData(null)
           setOpen(true)}}>Add Item</Button>
+
         <FormControl sx={{ width: "25%" }} margin="dense">
           <InputLabel>Select Category</InputLabel>
           <Select
@@ -239,6 +240,8 @@ const MenuTable = () => {
               ))}
           </Select>
         </FormControl>
+
+        
       </Box>
 
       {error && (

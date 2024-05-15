@@ -7,6 +7,7 @@ import MenuTable from '../components/Menu/MenuTable';
 import { useNavigate } from 'react-router-dom';
 import VendorAnalysis from '../components/VendorAnalysis';
 import VendorOrder from '../components/VendorOrder';
+import VendorOrderHistory from '../components/VendorOrderHistory';
 
 function VendorHome() {
   const [selectedTab, setSelectedTab] = useState('Order');
@@ -48,6 +49,7 @@ function VendorHome() {
             {selectedTab === 'Order History' && (
               <Grid item xs={12}>
                 <Typography variant='h6'>Bills  Table</Typography>
+                <VendorOrderHistory/>
               </Grid>
             )}
             {selectedTab === 'Analysis' && (

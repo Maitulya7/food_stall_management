@@ -23,8 +23,10 @@ import Lottie from "react-lottie";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import animationData from "../../../images/admin-register-animation.json";
 import CloseIcon from "@mui/icons-material/Close";
+import { useNavigate } from "react-router-dom";
 
 const VendorRegister = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [hasFranchise, setHasFranchise] = useState(false);
@@ -116,6 +118,7 @@ const VendorRegister = () => {
           )
           .then((res) => {
             console.log(res);
+            navigate("/vendor/login");
           })
           .catch((err) => {
             console.log(err);
