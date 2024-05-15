@@ -26,8 +26,7 @@ import DEFAULT_URL from "../../../config";
 
 const VendorOrder = () => {
   const [orders, setOrders] = useState([]);
-  const [isFoodItemDetailModalOpen, setFoodItemDetailModalOpen] =
-    useState(false);
+  const [isFoodItemDetailModalOpen, setFoodItemDetailModalOpen] =useState(false);
   const [foodItemDetail, setFoodItemDetail] = useState(null);
 
   useEffect(() => {
@@ -40,7 +39,6 @@ const VendorOrder = () => {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               "ngrok-skip-browser-warning": true,
-              "Content-Type": "multipart/form-data",
             },
           }
         );
@@ -118,7 +116,7 @@ const VendorOrder = () => {
 
   const handleApproveOrder = (oderId) => {
     axios
-      .put(`${DEFAULT_URL}/api/v1/vendor/orders/${oderId}/accept_order`)
+      .put(`${DEFAULT_URL}/api/v1/vendor/orders/${oderId}/accept_order`, {})
       .then((res) => {
         console.log(res);
       })
@@ -127,15 +125,9 @@ const VendorOrder = () => {
       });
   };
 
-
   const handleRejectOrder = (oderId) => {
-    const accessToken = localStorage.getItem("access-token");
     axios
-      .put(`${DEFAULT_URL}/api/v1/vendor/orders/${oderId}/reject_order`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      .put(`${DEFAULT_URL}/api/v1/vendor/orders/${oderId}/reject_order`, {})
       .then((res) => {
         console.log(res);
       })
@@ -186,12 +178,11 @@ const VendorOrder = () => {
       width: 100,
       renderCell: (params) => (
         <IconButton
-        color="secondary"
-        onClick={() => handleRejectOrder(params.row.orderId)}
-      >
-        <CloseIcon />
-      </IconButton>
-      
+          color="secondary"
+          onClick={() => handleRejectOrder(params.row.orderId)}
+        >
+          <CloseIcon />
+        </IconButton>
       ),
     },
     {
@@ -289,7 +280,7 @@ const VendorOrder = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {foodItemDetail.map((item, index) => (
+                          {foodItemDetail?.map((item, index) => (
                             <TableRow key={index}>
                               <TableCell>{item.name}</TableCell>
                               <TableCell>{item.category}</TableCell>

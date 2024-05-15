@@ -42,7 +42,7 @@ const CustomerLoginPage = () => {
         })
         .then((res) => {
           localStorage.setItem("access-token", res.data.customer.access_token);
-          localStorage.setItem("user-type", "customer");
+            localStorage.setItem("user-type", "customer");
           navigate("/customer/home");
           toast.success("Login successful!"); // Display success toast
           console.log(res);
