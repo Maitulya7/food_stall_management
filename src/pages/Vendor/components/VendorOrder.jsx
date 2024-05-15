@@ -24,6 +24,8 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { DataGrid } from "@mui/x-data-grid";
 import CloseIcon from "@mui/icons-material/Close";
+import AlarmOnIcon from '@mui/icons-material/AlarmOn';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import LocalDiningIcon from "@mui/icons-material/LocalDining";
 import axios from "axios";
 import DEFAULT_URL from "../../../config";
@@ -211,7 +213,7 @@ const VendorOrder = () => {
           variant="contained"
           color="primary"
           onClick={() => openFoodItemDetailModal(params.row.food_item_detail)}
-          startIcon={<LocalDiningIcon />}
+          startIcon={<MenuBookIcon />}
         >
           Open
         </Button>
@@ -267,7 +269,7 @@ const VendorOrder = () => {
           variant="contained"
           color="primary"
           onClick={() => handleCompleteOrder(params.row.orderId)}
-          startIcon={<LocalDiningIcon />}
+          startIcon={<AlarmOnIcon />}
         >
           Ready
         </Button>
