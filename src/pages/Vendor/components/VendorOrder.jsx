@@ -84,11 +84,15 @@ const VendorOrder = () => {
     const accessToken = localStorage.getItem("access-token");
 
     axios
-      .put(`${DEFAULT_URL}/api/v1/vendor/orders/${oderId}/preparing_order`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      .put(
+        `${DEFAULT_URL}/api/v1/vendor/orders/${oderId}/preparing_order`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
       })
@@ -102,6 +106,7 @@ const VendorOrder = () => {
     axios
       .put(
         `${DEFAULT_URL}/api/v1/vendor/orders/${oderId}/ready_for_delivery_order`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -117,8 +122,18 @@ const VendorOrder = () => {
   };
 
   const handleApproveOrder = (oderId) => {
+    const accessToken = localStorage.getItem("access-token");
+
     axios
-      .put(`${DEFAULT_URL}/api/v1/vendor/orders/${oderId}/accept_order`)
+      .put(
+        `${DEFAULT_URL}/api/v1/vendor/orders/${oderId}/accept_order`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
       })
@@ -127,15 +142,18 @@ const VendorOrder = () => {
       });
   };
 
-
   const handleRejectOrder = (oderId) => {
     const accessToken = localStorage.getItem("access-token");
     axios
-      .put(`${DEFAULT_URL}/api/v1/vendor/orders/${oderId}/reject_order`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      .put(
+        `${DEFAULT_URL}/api/v1/vendor/orders/${oderId}/reject_order`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
       })
@@ -186,12 +204,11 @@ const VendorOrder = () => {
       width: 100,
       renderCell: (params) => (
         <IconButton
-        color="secondary"
-        onClick={() => handleRejectOrder(params.row.orderId)}
-      >
-        <CloseIcon />
-      </IconButton>
-      
+          color="secondary"
+          onClick={() => handleRejectOrder(params.row.orderId)}
+        >
+          <CloseIcon />
+        </IconButton>
       ),
     },
     {
