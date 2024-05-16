@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   Typography,
   IconButton,
   Grid,
@@ -24,20 +23,18 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { DataGrid } from "@mui/x-data-grid";
 import CloseIcon from "@mui/icons-material/Close";
-import AlarmOnIcon from '@mui/icons-material/AlarmOn';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
+import AlarmOnIcon from "@mui/icons-material/AlarmOn";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 import LocalDiningIcon from "@mui/icons-material/LocalDining";
 import axios from "axios";
 import DEFAULT_URL from "../../../config";
 
 const VendorOrder = () => {
   const [orders, setOrders] = useState([]);
-  const [isFoodItemDetailModalOpen, setFoodItemDetailModalOpen] =
-    useState(false);
+  const [isFoodItemDetailModalOpen, setFoodItemDetailModalOpen] =useState(false);
   const [foodItemDetail, setFoodItemDetail] = useState(null);
-  const [selectedFilter, setSelectedFilter] = useState("");
-
-  const [gridKey, setGridKey] = useState(0); // Add state for grid key
+  const [selectedFilter, setSelectedFilter] = useState("All");
+  const [gridKey, setGridKey] = useState(0);
   const [filteredAndSortedOrders, setFilteredAndSortedOrders] = useState([]);
 
   const updateFilteredAndSortedOrders = (orders) => {
@@ -317,9 +314,7 @@ const VendorOrder = () => {
 
   return (
     <div style={{ height: "400px", width: "100%" }}>
-
-
-      <FormControl sx={{width:"25%" , marginY:"20px"}}>
+      <FormControl sx={{ width: "25%", marginY: "20px" }}>
         <InputLabel id="demo-simple-select-label">Filter Orders</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -329,11 +324,10 @@ const VendorOrder = () => {
           value={selectedFilter}
         >
           <MenuItem value="All">All</MenuItem>
-        <MenuItem value="pending">Pending</MenuItem>
-        <MenuItem value="approved">Approved</MenuItem>
+          <MenuItem value="pending">Pending</MenuItem>
+          <MenuItem value="approved">Approved</MenuItem>
         </Select>
       </FormControl>
-
 
       <DataGrid
         key={gridKey}

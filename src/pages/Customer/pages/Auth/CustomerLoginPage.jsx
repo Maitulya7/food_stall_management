@@ -171,9 +171,7 @@ const CustomerLoginPage = () => {
                 fontSize: { xs: "10px", sm: "15px", md: "20px", lg: "20px" },
               }}
             >
-              <Link href="/forgot-password" color="inherit">
-                Forgot Password?
-              </Link>
+             
             </Typography>
             <Typography
               sx={{

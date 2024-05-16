@@ -10,7 +10,6 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete"; // Import DeleteIcon
 import AddCategoryModal from "./AddCategoryModal";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -49,10 +48,7 @@ const CategoryTable = () => {
       });
   };
 
-  const handleEdit = (id) => {
-    // Handle edit action here
-    console.log(`Editing category with ID: ${id}`);
-  };
+ 
 
   const handleDelete = (id) => {
     const accessToken = localStorage.getItem("access-token");
@@ -127,7 +123,7 @@ const CategoryTable = () => {
         <IconButton
           color="primary"
           size="small"
-          onClick={() => handleViewImage(params.row.image_url)}
+          onClick={() => handleViewImage(params.row.image_url , console.log(params.row.image_url)) }
         >
           <VisibilityIcon />
         </IconButton>

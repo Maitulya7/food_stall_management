@@ -29,12 +29,10 @@ import DEFAULT_URL from "../../../config";
 
 const VendorOrderHistory = () => {
   const [orders, setOrders] = useState([]);
-  const [isFoodItemDetailModalOpen, setFoodItemDetailModalOpen] =
-    useState(false);
+  const [isFoodItemDetailModalOpen, setFoodItemDetailModalOpen] =useState(false);
   const [foodItemDetail, setFoodItemDetail] = useState(null);
-  const [selectedFilter, setSelectedFilter] = useState("");
-
-  const [gridKey, setGridKey] = useState(0); // Add state for grid key
+  const [selectedFilter, setSelectedFilter] = useState("All");
+  const [gridKey, setGridKey] = useState(0); 
   const [filteredAndSortedOrders, setFilteredAndSortedOrders] = useState([]);
 
   const updateFilteredAndSortedOrders = (orders) => {

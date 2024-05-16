@@ -22,7 +22,6 @@ const CustomerStall = () => {
   const [vendors, setVendors] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedVendor, setSelectedVendor] = useState(null);
-  const [loading, setLoading] = useState(true); // State to track loading status
 
   console.log(vendors)
 
@@ -61,10 +60,8 @@ const CustomerStall = () => {
         ).map((id) => allVendors.find((v) => v.id === id));
 
         setVendors(uniqueVendors);
-        setLoading(false); // Set loading to false once data is fetched
       } catch (error) {
         console.error("Error fetching categories:", error);
-        setLoading(false); // Ensure loading is set to false even if there's an error
       }
     };
 
@@ -75,17 +72,7 @@ const CustomerStall = () => {
     Navigate(`/customer/stall/vendor/${vendor.id}`)
 
   };
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="relative inline-flex">
-          <div className="w-8 h-8 bg-blue-500 rounded-full"></div>
-          <div className="w-8 h-8 bg-blue-500 rounded-full absolute top-0 left-0 animate-ping"></div>
-          <div className="w-8 h-8 bg-blue-500 rounded-full absolute top-0 left-0 animate-pulse"></div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <>

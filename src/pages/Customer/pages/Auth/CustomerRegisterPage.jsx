@@ -37,6 +37,7 @@ const CustomerRegisterPage = () => {
           customer: {
             email: values.email,
             password: values.password,
+            name: values.name,
           },
           client_id: "OT-Fkr2xgMFDGwjPO_cga2BiDwVZX5RDPwGtjTG1Vs8",
         })
@@ -112,6 +113,19 @@ const CustomerRegisterPage = () => {
                 />
                 <Field
                   as={TextField}
+                  name="name"
+                  type="text"
+                  label="Name"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  InputProps={{
+                    startAdornment: <AccountCircle />,
+                  }}
+                  sx={{ mb: 2 }}
+                />
+                <Field
+                  as={TextField}
                   name="password"
                   type={showPassword ? "text" : "password"}
                   label="Password"
@@ -167,11 +181,7 @@ const CustomerRegisterPage = () => {
                 mt: { xs: 2, md: 4 },
                 fontSize: { xs: "10px", sm: "15px", md: "20px", lg: "20px" },
               }}
-            >
-              <Link href="/forgot-password" color="inherit">
-                Forgot Password?
-              </Link>
-            </Typography>
+            ></Typography>
             <Typography
               sx={{
                 mt: { xs: 2, md: 4 },

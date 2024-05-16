@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { Grid } from '@mui/material';
-import DashboardBox from './DashoboardBox';
-import { ShoppingCart } from '@mui/icons-material';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import EqualizerIcon from '@mui/icons-material/Equalizer';
+import React, { useState } from "react";
+import { Grid } from "@mui/material";
+import DashboardBox from "./DashoboardBox";
+import { ShoppingCart } from "@mui/icons-material";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
+import HistoryIcon from '@mui/icons-material/History';
+
 
 const DashboardGrid = ({ onTabChange }) => {
-  const [selectedTab, setSelectedTab] = useState('Order'); 
+  const [selectedTab, setSelectedTab] = useState("Order");
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
@@ -16,17 +18,65 @@ const DashboardGrid = ({ onTabChange }) => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Order')} style={{ cursor: 'pointer' }}>
-        <DashboardBox label="Order" color="#4caf50" selected={selectedTab === 'Order'} icon={<ShoppingCart fontSize='large' />} />
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={3}
+        onClick={() => handleTabClick("Order")}
+        style={{ cursor: "pointer" }}
+      >
+        <DashboardBox
+          label="Order"
+          color="#4caf50"
+          selected={selectedTab === "Order"}
+          icon={<ShoppingCart fontSize="large" />}
+        />
       </Grid>
-      <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Menu')} style={{ cursor: 'pointer' }}>
-        <DashboardBox label="Menu" color="#ff9800" selected={selectedTab === 'Menu'} icon={<RestaurantMenuIcon  fontSize='large'/>} />
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={3}
+        onClick={() => handleTabClick("Menu")}
+        style={{ cursor: "pointer" }}
+      >
+        <DashboardBox
+          label="Menu"
+          color="#ff9800"
+          selected={selectedTab === "Menu"}
+          icon={<RestaurantMenuIcon fontSize="large" />}
+        />
       </Grid>
-      <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Order History')} style={{ cursor: 'pointer' }}>
-        <DashboardBox label="Order History" color="#EB9196" selected={selectedTab === 'Order History'} icon={<MonetizationOnIcon fontSize='large' />} />
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={3}
+        onClick={() => handleTabClick("Order History")}
+        style={{ cursor: "pointer" }}
+      >
+        <DashboardBox
+          label="Order History"
+          color="#EB9196"
+          selected={selectedTab === "Order History"}
+          icon={<HistoryIcon fontSize="large" />}
+        />
       </Grid>
-      <Grid item xs={12} sm={6} md={3} onClick={() => handleTabClick('Analysis')} style={{ cursor: 'pointer' }}>
-        <DashboardBox label="Analysis" color="#1976d2" selected={selectedTab === 'Analysis'} icon={<EqualizerIcon  fontSize='large'/>} />
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={3}
+        onClick={() => handleTabClick("Analysis")}
+        style={{ cursor: "pointer" }}
+      >
+        <DashboardBox
+          label="Analysis"
+          color="#1976d2"
+          selected={selectedTab === "Analysis"}
+          icon={<EqualizerIcon fontSize="large" />}
+        />
       </Grid>
     </Grid>
   );

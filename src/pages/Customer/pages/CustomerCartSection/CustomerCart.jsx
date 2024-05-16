@@ -22,10 +22,12 @@ const CustomerCart = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [vendorTotalPrices, setVendorTotalPrices] = useState({});
   const [groupedCartItems, setGroupedCartItems] = useState({});
+  const [numberOfOrders, setNumberOfOrders] = useState(0);
   const [Razorpay] = useRazorpay();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("access-token");
+  
 
     const fetchCartItems = async () => {
       try {
@@ -40,6 +42,7 @@ const CustomerCart = () => {
         );
         const cartData = response.data.cart;
         setCartItems(cartData.cart_items);
+        setNumberOfOrders(response.data.cart.cart_items.length)
 
         const total = calculateTotalPrice(cartData.cart_items);
         setTotalPrice(total);
@@ -64,6 +67,8 @@ const CustomerCart = () => {
 
     fetchCartItems();
   }, []);
+
+  localStorage.setItem("number-of-orders" , numberOfOrders);
 
   const calculateTotalPrice = (items) => {
     return items.reduce((acc, item) => acc + item.price, 0);
@@ -139,7 +144,7 @@ const CustomerCart = () => {
     }
   };
 
-  const handlePayment = (vendorID, totalAmount, totalItem) => {
+  const handlePayment = (items, vendorID, totalAmount, totalItem ) => {
     const accessToken = localStorage.getItem("access-token");
     axios
       .post(
@@ -159,10 +164,11 @@ const CustomerCart = () => {
       )
       .then((response) => {
         console.log("this is my payment response: ", response);
-
+        console.log(items.razorpay_key_id);
+        console.log(vendorID)
         if (response.data.order.status === "pending") {
           const options = {
-            key: "rzp_test_sF4v8bweGRs5TH",
+            key: items.razorpay_key_id,
             currency: "INR",
             order_id: response.data.order.razorpay_order_id,
             handler: (response) => {
@@ -253,183 +259,200 @@ const CustomerCart = () => {
 
   return (
     <>
-<Grid
-  container
-  justifyContent="center"
-  spacing={2}
-  sx={{ padding: "20px", marginBottom: "60px", backgroundColor: "#f5f5f5" }}
->
-  <Grid item xs={12} md={8}>
-    <Typography
-      variant="h4"
-      sx={{
-        marginBottom: "20px",
-        textAlign: "center",
-        color: "#333",
-        fontWeight: "bold",
-        textTransform: "uppercase",
-      }}
-    >
-      <ShoppingCartIcon sx={{ marginRight: "10px", color: "#555" }} /> Your
-      Cart
-    </Typography>
-    {Object.keys(groupedCartItems).length === 0 ? (
-      <Typography
-        variant="body1"
+      <Grid
+        container
+        justifyContent="center"
+        spacing={2}
         sx={{
-          textAlign: "center",
-          color: "#555",
-          fontStyle: "italic",
+          padding: "20px",
+          marginBottom: "60px",
+          backgroundColor: "#f5f5f5",
         }}
       >
-        Your cart is empty
-      </Typography>
-    ) : (
-      <>
-        {Object.entries(groupedCartItems).map(([vendorId, items]) => (
-          <Grid
-            key={vendorId}
-            container
-            spacing={2}
+        <Grid item xs={12} md={8}>
+          <Typography
+            variant="h4"
             sx={{
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "10px",
-              marginBottom:"40px",
-              display: "flex",
+              marginBottom: "20px",
+              textAlign: "center",
+              color: "#333",
+              fontWeight: "bold",
+              textTransform: "uppercase",
             }}
           >
-            <Grid item xs={12}>
-              <Typography
-                variant="h5"
-                sx={{ fontWeight: "bold", color: "#333" }}
-              >
-                {items[0].food_item.vendor_category.vendor.stall_name}
-              </Typography>
-            </Grid>
-            {items.map((item, index) => (
-              <Grid item xs={12} sm={6} key={item.id}>
-                <Card
+            <ShoppingCartIcon sx={{ marginRight: "10px", color: "#555" }} />{" "}
+            Your Cart
+          </Typography>
+          {Object.keys(groupedCartItems).length === 0 ? (
+            <Typography
+              variant="body1"
+              sx={{
+                textAlign: "center",
+                color: "#555",
+                fontStyle: "italic",
+              }}
+            >
+              Your cart is empty
+            </Typography>
+          ) : (
+            <>
+              {Object.entries(groupedCartItems).map(([vendorId, items] , index) => (
+                <Grid
+                  key={vendorId}
+                  container
+                  spacing={2}
                   sx={{
-                    border: "1px solid #eee",
+                    border: "1px solid #ccc",
                     borderRadius: "8px",
+                    padding: "10px",
+                    marginBottom: "40px",
                     display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    position: "relative",
                   }}
                 >
-                  <IconButton
-                    size="small"
-                    onClick={() => handleRemove(item.id)}
-                    sx={{
-                      position: "absolute",
-                      top: "5px",
-                      right: "5px",
-                      color: "#ff4f4f",
-                    }}
-                  >
-                    <RemoveShoppingCartIcon />
-                  </IconButton>
-                  <CardContent>
-                    <Typography variant="body1" sx={{ color: "#333" }}>
-                      {item.food_item.name}
-                    </Typography>
+                  <Grid item xs={12}>
                     <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      gutterBottom
-                      sx={{ color: "#555" }}
+                      variant="h5"
+                      sx={{ fontWeight: "bold", color: "#333" }}
                     >
-                      Price: ₹{item.food_item.price}
+                      {items[0].food_item.vendor_category.vendor.stall_name}
                     </Typography>
+                  </Grid>
+                  {items.map((item, index) => (
+                    <Grid item xs={12} sm={6} key={item.id}>
+                      <Card
+                        sx={{
+                          border: "1px solid #eee",
+                          borderRadius: "8px",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                          position: "relative",
+                        }}
+                      >
+                        <IconButton
+                          size="small"
+                          onClick={() => handleRemove(item.id)}
+                          sx={{
+                            position: "absolute",
+                            top: "5px",
+                            right: "5px",
+                            color: "#ff4f4f",
+                          }}
+                        >
+                          <RemoveShoppingCartIcon />
+                        </IconButton>
+                        <CardContent>
+                          <Typography variant="body1" sx={{ color: "#333" }}>
+                            {item.food_item.name}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            gutterBottom
+                            sx={{ color: "#555" }}
+                          >
+                            Price: ₹{item.food_item.price}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            gutterBottom
+                            sx={{ color: "#555" }}
+                          >
+                            Total Price: ₹{item.price}
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          sx={{
+                            justifyContent: "space-between",
+                            borderTop: "1px solid #eee",
+                            padding: "10px",
+                          }}
+                        >
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={() => handleDecrement(item)}
+                            sx={{
+                              color: "#ff4f4f",
+                              "&:hover": {
+                                backgroundColor: "rgba(255, 79, 79, 0.1)",
+                              },
+                            }}
+                          >
+                            <RemoveIcon />
+                          </Button>
+                          <Typography variant="body1" sx={{ color: "#333" }}>
+                            {item.quantity}
+                          </Typography>
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={() => handleIncrement(item)}
+                            sx={{
+                              color: "#4CAF50",
+                              "&:hover": {
+                                backgroundColor: "rgba(76, 175, 80, 0.1)",
+                              },
+                            }}
+                          >
+                            <AddIcon />
+                          </Button>
+                        </CardActions>
+                      </Card>
+                    </Grid>
+                  ))}
+                  <Grid item xs={12}>
                     <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      gutterBottom
-                      sx={{ color: "#555" }}
+                      variant="h6"
+                      sx={{ fontWeight: "bold", color: "#333" }}
                     >
-                      Total Price: ₹{item.price}
-                    </Typography>
-                  </CardContent>
-                  <CardActions
-                    sx={{
-                      justifyContent: "space-between",
-                      borderTop: "1px solid #eee",
-                      padding: "10px",
-                    }}
-                  >
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() => handleDecrement(item)}
-                      sx={{ color: "#ff4f4f", "&:hover": { backgroundColor: "rgba(255, 79, 79, 0.1)" } }}
-                    >
-                      <RemoveIcon />
-                    </Button>
-                    <Typography variant="body1" sx={{ color: "#333" }}>
-                      {item.quantity}
+                      Total Amount: ₹{vendorTotalPrices[vendorId]}
                     </Typography>
                     <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() => handleIncrement(item)}
-                      sx={{ color: "#4CAF50", "&:hover": { backgroundColor: "rgba(76, 175, 80, 0.1)" } }}
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      sx={{
+                        backgroundColor: "#4CAF50",
+                        color: "#fff",
+                        marginTop: "10px",
+                      }}
+                      onClick={() =>
+                        handlePayment(
+                          items[0].food_item.vendor_category.vendor,
+                          vendorId,
+                          calculateTotalPrice(items),
+                          items.reduce(
+                            (total, item) => total + item.quantity,
+                            0
+                          )
+                        )
+                      }
                     >
-                      <AddIcon />
+                      Proceed to Payment
                     </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-            <Grid item xs={12}>
-              <Typography
-                variant="h6"
-                sx={{ fontWeight: "bold", color: "#333" }}
-              >
-                Total Amount: ₹{vendorTotalPrices[vendorId]}
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{
-                  backgroundColor: "#4CAF50",
-                  color: "#fff",
-                  marginTop: "10px",
-                }}
-                onClick={() =>
-                  handlePayment(
-                    vendorId,
-                    calculateTotalPrice(items),
-                    items.reduce((total, item) => total + item.quantity, 0)
-                  )
-                }
-              >
-                Proceed to Payment
-              </Button>
-            </Grid>
-          </Grid>
-        ))}
-      </>
-    )}
-    <Typography
-      variant="h6"
-      sx={{
-        marginBottom: "10px",
-        textAlign: "center",
-        color: "#333",
-        marginTop: "20px",
-        fontWeight: "bold",
-      }}
-    >
-      Final Price: ₹{totalPrice}
-    </Typography>
-  </Grid>
-</Grid>
+                  </Grid>
+                </Grid>
+              ))}
+            </>
+          )}
+          <Typography
+            variant="h6"
+            sx={{
+              marginBottom: "10px",
+              textAlign: "center",
+              color: "#333",
+              marginTop: "20px",
+              fontWeight: "bold",
+            }}
+          >
+            Final Price: ₹{totalPrice}
+          </Typography>
+        </Grid>
+      </Grid>
 
-
-      <Footer />
+      <Footer numberOfOrders={numberOfOrders} />
     </>
   );
 };

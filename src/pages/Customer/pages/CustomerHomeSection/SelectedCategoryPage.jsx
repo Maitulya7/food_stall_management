@@ -20,7 +20,6 @@ import DEFAULT_URL from "../../../../config";
 const SelectedCategoryPage = () => {
   const { id } = useParams();
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [loading, setLoading] = useState(true);
   const Navigate = useNavigate();
 
   useEffect(() => {
@@ -44,10 +43,8 @@ const SelectedCategoryPage = () => {
         } else {
           console.error("Category not found");
         }
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching categories:", error);
-        setLoading(false);
       }
     };
 
@@ -60,10 +57,7 @@ const SelectedCategoryPage = () => {
     Navigate(`/customer/${vendorId}/foodItem/${id}`);
   };
 
-  if (loading) {
-    return <CircularProgress />;
-  }
-
+ 
   if (!selectedCategory) {
     return <div>Category not found!</div>;
   }

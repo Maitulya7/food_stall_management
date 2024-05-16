@@ -80,7 +80,6 @@ const AdminSidebar = () => {
         <SidebarContent>
           <Menu iconShape="square">
             <CustomMenuItem  style={{margin:"10px"}} icon={<Dashboard />}><Link to="/admin/home">Dashboard</Link></CustomMenuItem>
-            <CustomMenuItem style={{margin:"10px"}} icon={<Category />}><Link to="/admin/profile">Profile</Link></CustomMenuItem>
           </Menu>
         </SidebarContent>
       )}

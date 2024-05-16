@@ -17,7 +17,6 @@ const validationSchema = Yup.object().shape({
 
 const VendorLogin = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [formValues, setFormValues] = useState({
     email: "",
@@ -61,12 +60,13 @@ const VendorLogin = () => {
         })
         .catch((err) => {
           if (err.response && err.response.status === 404) {
-            setError("Invalid email or password.");
-          } else {
-            console.log(err);
+            toast.error("Invalid email or password.");
+          } else if(err.response && err.response.status === 401){
+            toast.error("Please wait for the admin to approve your account.");
           }
         });
     } catch (error) {
+     
       console.error("Login failed:", error.message);
     }
   };

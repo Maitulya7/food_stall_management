@@ -24,6 +24,9 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import animationData from "../../../images/admin-register-animation.json";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+
 
 const VendorRegister = () => {
   const navigate = useNavigate();
@@ -118,6 +121,7 @@ const VendorRegister = () => {
           )
           .then((res) => {
             console.log(res);
+            toast.success("Registration successful");
             navigate("/vendor/login");
           })
           .catch((err) => {
