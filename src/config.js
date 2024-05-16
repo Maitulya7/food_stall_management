@@ -1,3 +1,3 @@
-const DEFAULT_URL = "https://c5c3-27-59-85-211.ngrok-free.app"
+const DEFAULT_URL = "https://f4fa-27-59-92-100.ngrok-free.app"
 
 export default DEFAULT_URL;
